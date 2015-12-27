@@ -1,0 +1,181 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require_tree .
+ *= require_self
+ */
+
+
+h1, div, ul, li, a, p, form {
+  margin: 0;
+  padding: 0;
+  background: inherit;
+  box-sizing: inherit;
+  color: inherit;
+}
+
+.group:after {
+  display: block;
+  content: "";
+  clear: both;
+}
+
+body {
+  font-family: sans-serif;
+  box-sizing: border-box;
+}
+
+ul {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+button {
+  cursor: pointer;
+}
+
+.board {
+  float: left;
+  background: #0079BF;
+  color: white;
+  margin: 10px;
+  border-radius: 3px;
+  width: 222px;
+  min-height: 96px;
+  height: 1px;
+  overflow: hidden;
+}
+
+.board a, .list a {
+  display: block;
+  width: 100%;
+  min-height: 100%;
+  padding: 10px;
+}
+
+.list {
+  float: left;
+  width: 270px;
+  background: rgb(226, 228, 230);
+  margin: 10px;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+  color: rgb(77,77,77)
+}
+
+.list p {
+  margin: 8px;
+}
+
+.list-form button {
+  float: left;
+}
+
+.list-form button:focus {
+  outline: 0;
+}
+
+.list .open-form {
+  padding: 0;
+  width: 100%;
+  border: 0;
+  background: transparent;
+  padding: 8px;
+  text-align: left;
+  font-size: 14px;
+  color: #8c8c8c;
+}
+
+.list .open-form:hover {
+  background: #cdd2d4;
+  color: #4d4d4d;
+  text-decoration: underline;
+}
+
+.add {
+  width: 67px;
+  height: 34px;
+  background: linear-gradient(to bottom,#61bd4f 0,#5aac44 100%);
+  box-shadow: 0 1px 0 #3f6f21;
+  color: #fff;
+  border: 0;
+  border-radius: 3px;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.collapse {
+  border: 0;
+  padding: 0;
+  margin: 5px;
+  margin-left: 0;
+  width: 30px;
+  height: 30px;
+  font-size: 20px;
+  color: #aaa;
+  background: transparent;
+}
+
+.list .collapse:hover {
+  color: #4d4d4d;
+}
+
+.new-card-form textarea, .new-list-form textarea {
+  box-sizing: border-box;
+  width: calc(100% - 16px) ;
+  height: 68px;
+  padding: 5px;
+  border-radius: 3px;
+  border: 0;
+  margin: 0 8px;
+  resize: none;
+  font-size: 14px;
+}
+
+.new-list-form textarea {
+  width: 200px;
+}
+
+.list .buttons {
+  margin: 8px;
+}
+
+.list:hover {
+  cursor: -webkit-grab; cursor: -moz-grab;
+}
+
+.list:active, .card:active {
+  cursor: -webkit-grabbing; cursor: -moz-grabbing;
+}
+
+.list .cards {
+  margin: 8px;
+}
+
+.card-index-item {
+  background: white;
+  margin: 8px 0;
+  padding: 8px;
+  border-radius: 3px;
+}
+
+.card-index-item:hover {
+  background: rgb(237, 239, 240);
+}
+
+.card:hover {
+  cursor: pointer;
+}
