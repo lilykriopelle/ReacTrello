@@ -1,12 +1,13 @@
-<form action="<%= session_url %>" method="post">
+<form class="login-form" action="<%= session_url %>" method="post">
+  <h1>Log In</h1>
   <%= auth_token %>
-  <label>
+  <label for="email">
     Email
-    <input type="text" name="email">
   </label>
-  <label>
+    <input type="text" name="email" id="email" >
+  <label for="password">
     Password
-    <input type="text" name="password">
   </label>
+    <input type="password" name="password" id="password">
   <button>Submit</button>
 </form>

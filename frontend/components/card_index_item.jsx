@@ -1,6 +1,9 @@
 var React = require('react');
 var PropTypes = React.PropTypes;
 var ItemTypes = require('../constants/dnd_constants');
+var DropBin = require('./drop_bin');
+var UIActions = require('../actions/ui_actions');
+
 var DragSource = require('react-dnd').DragSource;
 var DropTarget = require('react-dnd').DropTarget;
 
@@ -9,19 +12,13 @@ var cardSource = {
     return props.card;
   },
 
-  endDrag: function (props, monitor, component) {
-    // var dropped = props.card;
-    // var droppedOn = monitor.getDropResult();
-    //
-    // if (dropped.list_id !== droppedOn.list_id) {
-    //   // card is switching lists
-    //   // debugger
-    // }
+  endDrag: function () {
+    UIActions.collapseAll();
   }
 };
 
 var cardTarget = {
-  hover: function (props, monitor) {
+  hover: function (props, monitor, component) {
     var target = props.card;
     var hovering = monitor.getItem();
 
@@ -30,19 +27,11 @@ var cardTarget = {
     }
   },
 
-  drop: function(props) {
+  drop: function(props, monitor, component) {
     props.drop();
     return props.card;
   }
 };
-
-function collect(connect, monitor) {
-  return {
-    connectDragSource: connect.dragSource(),
-    connectDropTarget: connect.dropTarget(),
-    isDragging: monitor.isDragging()
-  };
-}
 
 var CardIndexItem = React.createClass({
   propTypes: {
@@ -52,17 +41,33 @@ var CardIndexItem = React.createClass({
     isDragging: PropTypes.bool.isRequired
   },
 
+  getInitialState: function () {
+    return { placeholder: false };
+  },
+
+  componentWillReceiveProps: function(newProps) {
+    var card = this.props.card;
+    if (newProps.isOver && newProps.dragged.id != card.id && newProps.dragged.list_id != card.list_id) {
+      this.setState({ placeholder: true });
+    } else {
+      this.setState({ placeholder: false });
+    }
+  },
+
   render: function () {
     var connectDragSource = this.props.connectDragSource;
     var connectDropTarget = this.props.connectDropTarget;
 
     var isDragging = this.props.isDragging;
+    var showPlaceholder = this.state.placeholder;
 
-    return connectDropTarget(connectDragSource(connectDropTarget(
-      <li className="card-index-item" style={{ opacity: isDragging ? 0.5 : 1 }}>
-        { this.props.card.title }
-      </li>
-    )));
+    return connectDragSource(connectDropTarget(
+      <div>
+        <li className="card-index-item" style={{ opacity: isDragging ? 0.5 : 1 }}>
+          { this.props.card.title }
+        </li>
+      </div>
+    ));
   }
 });
 
@@ -75,9 +80,12 @@ var DragSourceDecorator = DragSource(ItemTypes.CARD, cardSource,
  });
 
  var DropTargetDecorator = DropTarget(ItemTypes.CARD, cardTarget,
-   function(connect) {
+   function(connect, monitor) {
      return {
-       connectDropTarget: connect.dropTarget()
+       connectDropTarget: connect.dropTarget(),
+       dropped: monitor.getDropResult(),
+       dragged: monitor.getItem(),
+       isOver: monitor.isOver()
      };
  });
 

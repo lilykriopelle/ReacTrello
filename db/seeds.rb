@@ -1,3 +1,7 @@
+User.destroy_all
+Board.destroy_all
+List.destroy_all
+
 lily = User.create!(email: 'lily', password: 'password')
 frankie = User.create!(email: 'frankie', password: 'password')
 

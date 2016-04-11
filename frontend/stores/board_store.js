@@ -3,6 +3,7 @@ var _boards = {};
 var _callbacks = [];
 var CHANGE_EVENT = "change";
 var BoardConstants = require('../constants/board_constants');
+var ListConstants = require('../constants/list_constants');
 var AppDispatcher = require('../dispatcher/dispatcher');
 var BoardStore = new Store(AppDispatcher);
 
@@ -28,6 +29,24 @@ Array.prototype.findById = function (id) {
   return -1;
 };
 
+BoardStore._addList = function (list) {
+  _boards[list.board_id].lists.push(list);
+};
+
+BoardStore._switchCard = function (oldList, newList, card, newIndex) {
+  oldList.cards.splice(oldList.cards.indexOf(oldList.cards.findById(card.id)),1);
+  card.list_id = newList.id;
+  newList.cards.splice(newIndex, 0, card);
+  BoardStore._updateOrds(oldList);
+  BoardStore._updateOrds(newList);
+};
+
+BoardStore._updateOrds = function (list) {
+  list.cards.forEach(function (card, index) {
+    card.ord = index;
+  });
+};
+
 BoardStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
     case BoardConstants.BOARDS_RECEIVED:
@@ -42,6 +61,16 @@ BoardStore.__onDispatch = function (payload) {
       var board = _boards[payload.card.board_id];
       var list = board.lists.findById(payload.card.list_id);
       list.cards.push(payload.card);
+      BoardStore.__emitChange();
+      break;
+    case BoardConstants.CARD_LIST_CHANGED:
+      var newList = _boards[payload.boardId].lists.findById(payload.newListId);
+      var oldList = _boards[payload.boardId].lists.findById(payload.card.list_id);
+      BoardStore._switchCard(oldList, newList, payload.card, payload.newOrd);
+      BoardStore.__emitChange();
+      break;
+    case ListConstants.LIST_RECEIVED:
+      BoardStore._addList(payload.list);
       BoardStore.__emitChange();
       break;
   }

@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+  before_action :redirect_if_logged_in, only: :new
 
   def create
     user = User.find_by_credentials(email: params[:email], password: params[:password])
@@ -14,6 +15,12 @@ class SessionsController < ApplicationController
   end
 
   def destroy
+  end
+
+  def redirect_if_logged_in
+    if current_user
+      redirect_to root_url
+    end
   end
 
 end

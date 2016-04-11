@@ -14,7 +14,8 @@ var CardForm = React.createClass({
     this.setState({ composing: true });
   },
 
-  _stopComposing: function () {
+  _stopComposing: function (e) {
+    e && e.preventDefault();
     this.setState({ composing: false, title: "" });
   },
 
@@ -23,8 +24,7 @@ var CardForm = React.createClass({
     ApiUtil.createCard({
       listId: this.props.listId,
       title: this.state.title
-    });
-    this._stopComposing();
+    }, this._stopComposing);
   },
 
   render: function () {
@@ -36,7 +36,7 @@ var CardForm = React.createClass({
           <textarea value={this.state.title} onChange={this._onChange} />
           <div className="buttons group">
             <button className="add" onClick={this._submitCard}>Add</button>
-            <button className="collapse" onClick={this._stopComposing}>X</button>
+            <button className="collapse" onClick={this._stopComposing}><i className="fa fa-times"></i></button>
           </div>
         </form>
       );

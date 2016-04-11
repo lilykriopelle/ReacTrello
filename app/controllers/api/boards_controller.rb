@@ -1,7 +1,7 @@
 class Api::BoardsController < ApplicationController
 
   def create
-    @board = Board.new(board_params)
+    @board = current_user.boards.new(board_params)
     if @board.save
       render :show
     else
@@ -10,19 +10,14 @@ class Api::BoardsController < ApplicationController
   end
 
   def update
-    @board = Boardfind(params[:id]).update(board_params)
-    if @board.save
-      render :show
-    else
-      render json: @board.errors.full_messages, status: :unprocessable_entity
+    board_params[:lists].values.each_with_index do |list_attrs, index|
+      List.find(list_attrs[:id]).update(ord: index)
     end
-  end
-
-  def destroy
+    render json: true
   end
 
   def show
-    @board = Board.includes(:owner, lists: :cards).find(params[:id])
+    @board = Board.includes(:owner, lists: [cards: :board]).find(params[:id])
     render :show
   end
 
@@ -33,6 +28,6 @@ class Api::BoardsController < ApplicationController
 
   private
     def board_params
-      params.require(:board).permit(:title, :owner_id)
+      params.require(:board).permit(:title, :owner_id, lists: [:id, :title, :ord, cards: [:title, :ord, :id, :list_id]])
     end
 end

@@ -1,7 +1,7 @@
 var ApiActions = require('../actions/api_actions.js');
+var BoardStore = require('../stores/board_store.js');
 
-ApiUtil = {
-
+var ApiUtil = {
   fetchBoards: function () {
     $.ajax({
       url: '/api/boards',
@@ -24,7 +24,7 @@ ApiUtil = {
     });
   },
 
-  createCard: function (cardData) {
+  createCard: function (cardData, callback) {
     $.ajax({
       url: '/api/cards',
       method: 'POST',
@@ -37,6 +37,38 @@ ApiUtil = {
       },
       success: function(data) {
         ApiActions.receiveCard(data);
+        callback && callback();
+      }.bind(this)
+    });
+  },
+
+  createList: function (listData, callback) {
+    $.ajax({
+      url: '/api/lists',
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        list: {
+          title: listData.title,
+          board_id: listData.boardId
+        }
+      },
+      success: function(data) {
+        ApiActions.receiveList(data);
+        callback && callback();
+      }.bind(this)
+    });
+  },
+
+  createBoard: function (board, callback) {
+    $.ajax({
+      url: '/api/boards',
+      method: 'POST',
+      dataType: 'json',
+      data: { board: board },
+      success: function(data) {
+        ApiActions.receiveBoard(data);
+        callback && callback();
       }.bind(this)
     });
   },
@@ -50,6 +82,36 @@ ApiUtil = {
         list: {
           cards: cards
         }
+      }
+    });
+  },
+
+  updateListOrder: function (boardId, lists) {
+    $.ajax({
+      url: '/api/boards/' + boardId,
+      method: 'PATCH',
+      dataType: 'json',
+      data: {
+        board: {
+          lists: lists
+        }
+      }
+    });
+  },
+
+  changeCardList: function (cardId, newListId) {
+    $.ajax({
+      url: '/api/cards/' + cardId,
+      method: 'PATCH',
+      dataType: 'json',
+      data: {
+        card: {
+          list_id: newListId
+        }
+      },
+      success: function (card) {
+        var board = BoardStore.all()[card.board_id];
+        ApiUtil.updateCardOrder(newListId, board.lists.findById(newListId).cards);
       }
     });
   }

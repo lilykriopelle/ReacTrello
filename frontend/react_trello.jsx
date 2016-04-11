@@ -7,12 +7,20 @@ var IndexRoute = ReactRouter.IndexRoute;
 var BoardsIndex = require('./components/boards_index.jsx');
 var BoardShow = require('./components/board_show.jsx');
 
+var Header = React.createClass({
+  render: function () {
+    return <header className="group"><a href="/#">ReacTrello</a></header>;
+  }
+});
+
 var App = React.createClass({
   render: function(){
     return (
       <div>
-        <header><h1>ReacTrello</h1></header>
-        {this.props.children}
+        <Header/>
+        <main>
+          {this.props.children}
+        </main>
       </div>
     );
   }

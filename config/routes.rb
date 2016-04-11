@@ -6,7 +6,7 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     resources :boards
-    resources :cards, only: :create
-    resources :lists, only: :update
+    resources :cards, only: [:create,:update]
+    resources :lists, only: [:create, :update]
   end
 end

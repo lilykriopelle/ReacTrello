@@ -15,12 +15,13 @@
  */
 
 
-h1, div, ul, li, a, p, form {
+h1, div, ul, li, a, p, form, h1, h2, h3 {
   margin: 0;
   padding: 0;
   background: inherit;
   box-sizing: inherit;
   color: inherit;
+  font-family: inherit;
 }
 
 .group:after {
@@ -32,6 +33,10 @@ h1, div, ul, li, a, p, form {
 body {
   font-family: sans-serif;
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  color: #4d4d4d;
+  font-family: 'Open Sans', sans-serif;
 }
 
 ul {
@@ -46,16 +51,157 @@ button {
   cursor: pointer;
 }
 
-.board {
-  float: left;
-  background: #0079BF;
+header {
+  width: 100%;
+  height: 40px;
+  background: #026aa7;
+  position: relative;
+}
+
+header a {
+  padding: 6px;
+  border-radius: 5px;
+  background-color: rgba(255,255,255,.2);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  font-weight: bold;
   color: white;
+}
+
+header a:hover {
+  background-color: rgba(255,255,255,.5)
+}
+
+main {
+  margin: 42px;
+}
+
+.boards-index li:first-child, .board-show li:first-child {
+  margin-left: 0;
+}
+
+.board {
+  background: #0079BF;
+}
+
+.boards-index li {
+  float: left;
+  color: white;
+  font-weight: bold;
   margin: 10px;
   border-radius: 3px;
-  width: 222px;
+  width: 23%;
   min-height: 96px;
   height: 1px;
   overflow: hidden;
+  cursor: pointer;
+}
+
+ .open-board-form {
+   width: 100%;
+   margin: 0;
+ }
+
+.open-board-form, .open-list-form {
+  min-height: 96px;
+  border: 0;
+  background: #e2e4e6;
+  font-size: 14px;
+  font-weight: normal;
+  color: #8c8c8c;
+}
+
+
+.open-list-form {
+  height: 34px;
+}
+
+.open-board-form:hover {
+  background-color: #d6dadc;
+}
+
+.new-board-form, .new-list-form {
+  width: 300px;
+  background: white;
+  border: 1px solid #eee;
+  float: left;
+  position: relative;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 1px 6px rgba(0,0,0,.15);
+  margin-top: 10px;
+  margin-left: 10px;
+}
+
+.new-board-form .close {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  color: #8c8c8c;
+  cursor: pointer;
+}
+
+ .new-list-form .close {
+   color: #8c8c8c;
+   cursor: pointer;
+   float: left;
+ }
+
+.new-board-form .close:hover, .new-list-form .close:hover {
+  color: #4d4d4d;
+}
+
+.new-board-form h1 {
+  font-size: 14px;
+  text-align: center;
+  font-weight: normal;
+  color: #8c8c8c;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgb(214, 218, 220);
+  margin-bottom: 10px;
+}
+
+.new-board-form label {
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.new-board-form input, .new-list-form input {
+  width: calc(100% - 20px);
+  margin: auto;
+  font-size: 14px;
+  height: 26px;
+  padding: 4px;
+  background-color: #e2e4e6;
+  border-radius: 5px;
+  margin-top: 10px;
+  border: 1px solid #aaa;
+}
+
+.new-board-form input:focus, .new-list-form input:focus {
+  background: white;
+}
+
+.new-board-form button {
+  margin-top: 10px;
+}
+
+ .new-list-form button {
+   margin-top: 10px;
+   float: left;
+ }
+
+  .new-list-form .close {
+    background: transparent;
+    border: 0;
+    margin-left: 5px;
+    font-size: 20px;
+  }
+
+.board:hover {
+  background-color: rgba(0, 121, 191, .5)
 }
 
 .board a, .list a {
@@ -78,17 +224,14 @@ button {
 
 .list p {
   margin: 8px;
+  margin-bottom: 0;
 }
 
 .list-form button {
   float: left;
 }
 
-.list-form button:focus {
-  outline: 0;
-}
-
-.list .open-form {
+.open-form {
   padding: 0;
   width: 100%;
   border: 0;
@@ -105,7 +248,7 @@ button {
   text-decoration: underline;
 }
 
-.add {
+.add, .new-board-form button {
   width: 67px;
   height: 34px;
   background: linear-gradient(to bottom,#61bd4f 0,#5aac44 100%);
@@ -162,14 +305,27 @@ button {
 }
 
 .list .cards {
-  margin: 8px;
+  margin: 0 8px;
 }
 
-.card-index-item {
+.card-index-item, .drop-bin {
   background: white;
-  margin: 8px 0;
   padding: 8px;
   border-radius: 3px;
+}
+
+.drop-bin {
+  background: #e2e4e6;
+  width: 254px;
+  margin: 0 auto;
+  padding: 0;
+  height: 8px;
+}
+
+.drop-bin.active {
+  height: 34px;
+  margin: 8px auto;
+  background-color: #ccc;
 }
 
 .card-index-item:hover {
@@ -178,4 +334,33 @@ button {
 
 .card:hover {
   cursor: pointer;
+}
+
+@media (max-width: 966px) {
+  .boards-list {
+    width: 650px;
+  }
+
+  .board-list-item:nth-child(3n + 1) {
+    margin-left: 0;
+  }
+
+  .boards-list li {
+    width: 30%;
+  }
+
+}
+
+@media (max-width: 722px) {
+
+  .boards-list {
+    width: 100%;
+  }
+
+  .boards-list li {
+    width: 100%;
+    float: none;
+    margin: 20px 0;
+  }
+
 }

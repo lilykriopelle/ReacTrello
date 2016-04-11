@@ -1,6 +1,8 @@
 var AppDispatcher = require('../dispatcher/dispatcher');
 var BoardConstants = require('../constants/board_constants.js');
-ApiActions = {
+var ListConstants = require('../constants/list_constants.js');
+
+var ApiActions = {
   receiveBoards: function(boards) {
     AppDispatcher.dispatch({
       actionType: BoardConstants.BOARDS_RECEIVED,
@@ -15,12 +17,20 @@ ApiActions = {
     });
   },
 
+  receiveList: function(list) {
+    AppDispatcher.dispatch({
+      actionType: ListConstants.LIST_RECEIVED,
+      list: list
+    });
+  },
+
   receiveCard: function(card) {
     AppDispatcher.dispatch({
       actionType: BoardConstants.CARD_RECEIVED,
       card: card
     });
   }
+
 };
 
 window.ApiActions = ApiActions;
