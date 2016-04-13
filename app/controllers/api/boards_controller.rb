@@ -28,6 +28,6 @@ class Api::BoardsController < ApplicationController
 
   private
     def board_params
-      params.require(:board).permit(:title, :owner_id, lists: [:id, :title, :ord, cards: [:title, :ord, :id, :list_id]])
+      params.require(:board).permit(:title, :owner_id, lists: [:id, :title, :board_id, :ord, cards: [:title, :ord, :id, :list_id, :board_id]])
     end
 end

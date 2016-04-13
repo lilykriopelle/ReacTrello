@@ -31191,16 +31191,11 @@
 	          null,
 	          'Create Board'
 	        ),
-	        React.createElement(
-	          'label',
-	          null,
-	          'Title',
-	          React.createElement('input', {
-	            type: 'text',
-	            onChange: this._onChange,
-	            value: this.state.title,
-	            placeholder: this.randomPlaceholder() })
-	        ),
+	        React.createElement('input', {
+	          type: 'text',
+	          onChange: this._onChange,
+	          value: this.state.title,
+	          placeholder: this.randomPlaceholder() }),
 	        React.createElement(
 	          'button',
 	          null,
@@ -31302,10 +31297,14 @@
 	        board ? board.title : ""
 	      ),
 	      React.createElement(
-	        'ul',
-	        { className: 'group' },
-	        lists,
-	        listForm
+	        'div',
+	        { className: 'scroll-container' },
+	        React.createElement(
+	          'ul',
+	          { className: 'list-list' },
+	          lists,
+	          listForm
+	        )
 	      )
 	    );
 	  }

@@ -75,7 +75,22 @@ header a:hover {
 }
 
 main {
-  margin: 42px;
+  margin: 42px 0;
+  position: absolute;;
+  top: 50px;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  // overflow: auto;
+}
+
+.board-show {
+  height: 100%;
+  overflow-y: hidden;
+}
+
+.boards-index {
+  margin: 0 20px;
 }
 
 .boards-index li:first-child, .board-show li:first-child {
@@ -93,19 +108,18 @@ main {
   margin: 10px;
   border-radius: 3px;
   width: 23%;
-  min-height: 96px;
-  height: 1px;
+  height: 96px;
   overflow: hidden;
   cursor: pointer;
 }
 
- .open-board-form {
-   width: 100%;
-   margin: 0;
- }
+.board-list-item:last-child {
+  overflow: visible;
+}
 
 .open-board-form, .open-list-form {
   min-height: 96px;
+  margin-left: 10px;
   border: 0;
   background: #e2e4e6;
   font-size: 14px;
@@ -113,6 +127,17 @@ main {
   color: #8c8c8c;
 }
 
+
+.open-board-form {
+  width: 100%;
+  margin: 0;
+}
+
+.open-list-form {
+  min-width: 322px;
+  height: 111px;
+  margin-top: 10px;
+}
 
 .open-list-form {
   height: 34px;
@@ -123,7 +148,8 @@ main {
 }
 
 .new-board-form, .new-list-form {
-  width: 300px;
+  min-width: 300px;
+  min-height: 95px;
   background: white;
   border: 1px solid #eee;
   float: left;
@@ -131,8 +157,12 @@ main {
   padding: 10px;
   border-radius: 5px;
   box-shadow: 0 1px 6px rgba(0,0,0,.15);
+}
+
+.new-list-form {
   margin-top: 10px;
   margin-left: 10px;
+  height: 100px;
 }
 
 .new-board-form .close {
@@ -143,11 +173,11 @@ main {
   cursor: pointer;
 }
 
- .new-list-form .close {
-   color: #8c8c8c;
-   cursor: pointer;
-   float: left;
- }
+.new-list-form .close {
+ color: #8c8c8c;
+ cursor: pointer;
+ float: left;
+}
 
 .new-board-form .close:hover, .new-list-form .close:hover {
   color: #4d4d4d;
@@ -212,8 +242,8 @@ main {
 }
 
 .list {
-  float: left;
-  width: 270px;
+  min-width: 270px;
+  height: 100%;
   background: rgb(226, 228, 230);
   margin: 10px;
   border-radius: 3px;
@@ -336,6 +366,23 @@ main {
   cursor: pointer;
 }
 
+.list-list {
+  margin: 0 20px;
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  overflow: auto;
+  padding-bottom: 100%;
+}
+
+.board-show h3 {
+  margin: 10px 20px;
+}
+
+.scroll-container {
+  overflow: hidden;
+}
+
 @media (max-width: 966px) {
   .boards-list {
     width: 650px;
@@ -351,7 +398,7 @@ main {
 
 }
 
-@media (max-width: 722px) {
+@media (max-width: 622px) {
 
   .boards-list {
     width: 100%;

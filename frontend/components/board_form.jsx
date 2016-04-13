@@ -45,14 +45,11 @@ var BoardForm = React.createClass({
         <form className="new-board-form" onSubmit={this._submitBoard}>
           <div className="close" onClick={this._stopComposing}><i className="fa fa-times"></i></div>
           <h1>Create Board</h1>
-          <label>
-            Title
             <input
               type="text"
               onChange={this._onChange}
               value={this.state.title}
               placeholder={this.randomPlaceholder()}/>
-          </label>
           <button>Create</button>
         </form>
       );

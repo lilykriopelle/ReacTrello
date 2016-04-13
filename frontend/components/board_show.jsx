@@ -75,10 +75,12 @@ var BoardShow = React.createClass({
     return (
       <div className="board-show">
         <h3>{board ? board.title : ""}</h3>
-        <ul className="group">
-          {lists}
-          {listForm}
-        </ul>
+        <div className="scroll-container">
+          <ul className="list-list">
+            {lists}
+            {listForm}
+          </ul>
+        </div>
       </div>
     );
   }
