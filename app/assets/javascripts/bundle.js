@@ -52,6 +52,7 @@
 	var IndexRoute = ReactRouter.IndexRoute;
 	var BoardsIndex = __webpack_require__(206);
 	var BoardShow = __webpack_require__(235);
+	var BoardsDropdown = __webpack_require__(353);
 	
 	var Header = React.createClass({
 	  displayName: 'Header',
@@ -60,9 +61,10 @@
 	    return React.createElement(
 	      'header',
 	      { className: 'group' },
+	      React.createElement(BoardsDropdown, null),
 	      React.createElement(
 	        'a',
-	        { href: '/#' },
+	        { className: 'logo', href: '/#' },
 	        'Mello'
 	      )
 	    );
@@ -31244,6 +31246,10 @@
 	    ApiUtil.fetchSingleBoard(this.props.routeParams.id);
 	  },
 	
+	  componentWillReceiveProps: function (newProps) {
+	    ApiUtil.fetchSingleBoard(parseInt(newProps.params.id));
+	  },
+	
 	  componentWillUnmount: function () {
 	    this.callbackToken.remove();
 	  },
@@ -38056,6 +38062,82 @@
 	}
 	
 	module.exports = exports['default'];
+
+/***/ },
+/* 353 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var BoardStore = __webpack_require__(207);
+	var ApiUtil = __webpack_require__(231);
+	
+	var BoardsDropdown = React.createClass({
+	  displayName: 'BoardsDropdown',
+	
+	  getInitialState: function () {
+	    return { boards: BoardStore.all(), visible: false };
+	  },
+	
+	  componentDidMount: function () {
+	    this.callbackToken = BoardStore.addListener(this._onChange);
+	    ApiUtil.fetchBoards();
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.callbackToken.remove();
+	  },
+	
+	  _onChange: function () {
+	    this.setState({ boards: BoardStore.all() });
+	  },
+	
+	  _toggleVisbility: function () {
+	    this.setState({ visible: !this.state.visible });
+	  },
+	
+	  render: function () {
+	    var boards = "";
+	    if (this.state.visible) {
+	      boards = React.createElement(
+	        'div',
+	        { className: 'board-dropdown-list' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          'My Boards'
+	        ),
+	        React.createElement(
+	          'ul',
+	          null,
+	          Object.keys(this.state.boards).map((function (boardId) {
+	            return React.createElement(
+	              'li',
+	              { className: 'board-list-li', key: boardId },
+	              React.createElement(
+	                'a',
+	                { href: "#/boards/" + boardId },
+	                this.state.boards[boardId].title
+	              )
+	            );
+	          }).bind(this))
+	        )
+	      );
+	    }
+	    return React.createElement(
+	      'div',
+	      { className: 'boards-dropdown' },
+	      React.createElement(
+	        'a',
+	        { className: 'reveal-boards', onClick: this._toggleVisbility },
+	        'Boards'
+	      ),
+	      boards
+	    );
+	  }
+	
+	});
+	
+	module.exports = BoardsDropdown;
 
 /***/ }
 /******/ ]);

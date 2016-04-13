@@ -18,6 +18,10 @@ var BoardShow = React.createClass({
     ApiUtil.fetchSingleBoard(this.props.routeParams.id);
   },
 
+  componentWillReceiveProps: function (newProps) {
+    ApiUtil.fetchSingleBoard(parseInt(newProps.params.id));
+  },
+
   componentWillUnmount: function () {
     this.callbackToken.remove();
   },

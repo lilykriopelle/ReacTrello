@@ -47,6 +47,10 @@ a {
   text-decoration: none;
 }
 
+a:hover {
+  cursor: pointer;
+}
+
 button {
   cursor: pointer;
 }
@@ -62,10 +66,6 @@ header a {
   padding: 6px;
   border-radius: 5px;
   background-color: rgba(255,255,255,.2);
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%) translateY(-50%);
   font-weight: bold;
   color: white;
 }
@@ -73,6 +73,14 @@ header a {
 header a:hover {
   background-color: rgba(255,255,255,.5)
 }
+
+header .logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
 
 main {
   margin: 42px 0;
@@ -163,6 +171,7 @@ main {
   margin-top: 10px;
   margin-left: 10px;
   height: 100px;
+  border-radius: 3px;
 }
 
 .new-board-form .close {

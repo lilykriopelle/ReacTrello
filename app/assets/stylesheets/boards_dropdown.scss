@@ -1,0 +1,35 @@
+.boards-dropdown .reveal-boards {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  left: 10px;
+}
+
+.board-dropdown-list {
+  position: absolute;
+  top: calc(100% + 5px);
+  left: 10px;
+  width: 280px;
+  background: white;
+  box-shadow: 0 3px 6px rgba(0,0,0,.4);
+  border-radius: 3px;
+  z-index: 100;
+  padding: 6px;
+}
+
+.board-list-li a {
+  padding: 10px;
+  color: #aaa;
+  display: block;
+  font-weight: normal;
+}
+
+.board-list-li:hover {
+  background: #eee;
+}
+
+.boards-dropdown h1 {
+  font-size: 14px;
+  color: rgb(140, 140, 140);
+  margin: 10px 0;
+}
