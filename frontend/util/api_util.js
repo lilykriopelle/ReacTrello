@@ -114,6 +114,17 @@ var ApiUtil = {
         ApiUtil.updateCardOrder(newListId, board.lists.findById(newListId).cards);
       }
     });
+  },
+
+  logOut: function () {
+    $.ajax({
+      url: '/api/session',
+      method: 'DELETE',
+      dataType: 'json',
+      success: function () {
+        window.location = "";
+      }
+    });
   }
 
 };

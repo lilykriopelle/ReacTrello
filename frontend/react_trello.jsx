@@ -7,6 +7,7 @@ var IndexRoute = ReactRouter.IndexRoute;
 var BoardsIndex = require('./components/boards_index.jsx');
 var BoardShow = require('./components/board_show.jsx');
 var BoardsDropdown = require('./components/boards_dropdown.jsx');
+var UserDropdown = require('./components/user_dropdown.jsx');
 
 var Header = React.createClass({
   render: function () {
@@ -14,6 +15,7 @@ var Header = React.createClass({
       <header className="group">
         <BoardsDropdown/>
         <a className="logo" href="/#">Mello</a>
+        <UserDropdown/>
       </header>
     );
   }

@@ -53,6 +53,7 @@
 	var BoardsIndex = __webpack_require__(206);
 	var BoardShow = __webpack_require__(235);
 	var BoardsDropdown = __webpack_require__(353);
+	var UserDropdown = __webpack_require__(354);
 	
 	var Header = React.createClass({
 	  displayName: 'Header',
@@ -66,7 +67,8 @@
 	        'a',
 	        { className: 'logo', href: '/#' },
 	        'Mello'
-	      )
+	      ),
+	      React.createElement(UserDropdown, null)
 	    );
 	  }
 	});
@@ -31066,6 +31068,17 @@
 	        ApiUtil.updateCardOrder(newListId, board.lists.findById(newListId).cards);
 	      }
 	    });
+	  },
+	
+	  logOut: function () {
+	    $.ajax({
+	      url: '/api/session',
+	      method: 'DELETE',
+	      dataType: 'json',
+	      success: function () {
+	        window.location = "";
+	      }
+	    });
 	  }
 	
 	};
@@ -38138,6 +38151,93 @@
 	});
 	
 	module.exports = BoardsDropdown;
+
+/***/ },
+/* 354 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ApiUtil = __webpack_require__(231);
+	
+	var UserDropdown = React.createClass({
+	  displayName: 'UserDropdown',
+	
+	  getInitialState: function () {
+	    return { visible: false };
+	    // return { user: CurrentUserStore.user(), visible: false };
+	  },
+	
+	  componentDidMount: function () {
+	    // this.callbackToken = CurrentUserStore.addListener(this._onChange);
+	    // ApiUtil.fetchCurrentUser();
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.callbackToken.remove();
+	  },
+	
+	  _onChange: function () {
+	    // this.setState({ user: CurrentUserStore.user() });
+	  },
+	
+	  _toggleVisbility: function () {
+	    this.setState({ visible: !this.state.visible });
+	  },
+	
+	  logOut: function () {
+	    ApiUtil.logOut();
+	  },
+	
+	  render: function () {
+	    var user = "";
+	    if (this.state.user) {
+	      user = this.state.user.email;
+	    }
+	
+	    var dropdown = "";
+	    if (this.state.visible) {
+	      dropdown = React.createElement(
+	        'div',
+	        { className: 'user-dropdown-list' },
+	        React.createElement(
+	          'ul',
+	          null,
+	          React.createElement(
+	            'li',
+	            null,
+	            React.createElement(
+	              'a',
+	              { className: 'user-dropdown-button', href: '#/profile' },
+	              'Profile'
+	            )
+	          ),
+	          React.createElement(
+	            'li',
+	            null,
+	            React.createElement(
+	              'button',
+	              { className: 'user-dropdown-button', onClick: this.logOut },
+	              'Log Out'
+	            )
+	          )
+	        )
+	      );
+	    }
+	    return React.createElement(
+	      'div',
+	      { className: 'user-dropdown' },
+	      React.createElement(
+	        'a',
+	        { className: 'reveal-user-menu', onClick: this._toggleVisbility },
+	        'lily'
+	      ),
+	      dropdown
+	    );
+	  }
+	
+	});
+	
+	module.exports = UserDropdown;
 
 /***/ }
 /******/ ]);
