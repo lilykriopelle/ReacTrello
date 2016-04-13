@@ -54,6 +54,7 @@
 	var BoardShow = __webpack_require__(235);
 	var BoardsDropdown = __webpack_require__(353);
 	var UserDropdown = __webpack_require__(354);
+	var Profile = __webpack_require__(355);
 	
 	var Header = React.createClass({
 	  displayName: 'Header',
@@ -94,7 +95,8 @@
 	  Route,
 	  { path: '/', component: App },
 	  React.createElement(IndexRoute, { component: BoardsIndex }),
-	  React.createElement(Route, { path: 'boards/:id', component: BoardShow })
+	  React.createElement(Route, { path: 'boards/:id', component: BoardShow }),
+	  React.createElement(Route, { path: 'profile', component: Profile })
 	);
 	
 	$(function () {
@@ -38238,6 +38240,27 @@
 	});
 	
 	module.exports = UserDropdown;
+
+/***/ },
+/* 355 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var Profile = React.createClass({
+	  displayName: 'Profile',
+	
+	  render: function () {
+	    var board = this.props.board;
+	    return React.createElement(
+	      'div',
+	      null,
+	      'USER PROFILE'
+	    );
+	  }
+	});
+	
+	module.exports = Profile;
 
 /***/ }
 /******/ ]);

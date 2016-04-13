@@ -8,6 +8,8 @@ var BoardsIndex = require('./components/boards_index.jsx');
 var BoardShow = require('./components/board_show.jsx');
 var BoardsDropdown = require('./components/boards_dropdown.jsx');
 var UserDropdown = require('./components/user_dropdown.jsx');
+var Profile = require('./components/profile.jsx');
+
 
 var Header = React.createClass({
   render: function () {
@@ -38,6 +40,7 @@ var routes = (
   <Route path="/" component={App}>
     <IndexRoute component={BoardsIndex}/>
     <Route path="boards/:id" component={BoardShow}/>
+    <Route path="profile" component={Profile}/>
   </Route>
 );
 

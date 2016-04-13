@@ -9,5 +9,10 @@
     Password
   </label>
     <input type="password" name="password" id="password">
+    <div class="errors">
+      <% if flash.now[:errors] %>
+      <%= flash.now[:errors].join(", ") %>
+      <% end %>
+    </div>
   <button>Submit</button>
 </form>

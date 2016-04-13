@@ -1,3 +1,8 @@
+.errors {
+  font-weight: normal;
+  color: red;
+}
+
 .login-form {
   width: auto;
   padding: 50px;
@@ -33,7 +38,7 @@
 
 .login-form button {
   display: block;
-  margin-top: 44px;
+  margin-top: 35px;
   width: 110px;
   height: 49px;
   font-size: 20px;
