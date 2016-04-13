@@ -9,7 +9,7 @@ var BoardShow = require('./components/board_show.jsx');
 
 var Header = React.createClass({
   render: function () {
-    return <header className="group"><a href="/#">ReacTrello</a></header>;
+    return <header className="group"><a href="/#">Mello</a></header>;
   }
 });
 
