@@ -1,5 +1,5 @@
 <form class="login-form" action="<%= session_url %>" method="post">
-  <h1>Log In</h1>
+  <h1>Sign In</h1>
   <%= auth_token %>
   <label for="email">
     Email
@@ -15,4 +15,5 @@
       <% end %>
     </div>
   <button>Submit</button>
+  <p>Don't have an account?  <a href="<%= new_user_url %>">Sign Up!</a></p>
 </form>
