@@ -10,7 +10,7 @@ var HTML5Backend = require('react-dnd-html5-backend');
 var BoardShow = React.createClass({
 
   getInitialState: function () {
-    return { board: BoardStore.all()[this.props.routeParams.id] };
+    return { board: BoardStore.all()[parseInt(this.props.routeParams.id)] };
   },
 
   componentDidMount: function () {
