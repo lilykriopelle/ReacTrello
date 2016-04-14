@@ -27,6 +27,18 @@ var UIActions = {
     AppDispatcher.dispatch({
       actionType: UIConstants.RESET_BINS
     });
+  },
+
+  toggleUserDropdown: function () {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.TOGGLE_USER_DROPDOWN
+    });
+  },
+
+  toggleBoardsDropdown: function () {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.TOGGLE_BOARDS_DROPDOWN
+    });
   }
 };
 

@@ -36119,6 +36119,18 @@
 	    AppDispatcher.dispatch({
 	      actionType: UIConstants.RESET_BINS
 	    });
+	  },
+	
+	  toggleUserDropdown: function () {
+	    AppDispatcher.dispatch({
+	      actionType: UIConstants.TOGGLE_USER_DROPDOWN
+	    });
+	  },
+	
+	  toggleBoardsDropdown: function () {
+	    AppDispatcher.dispatch({
+	      actionType: UIConstants.TOGGLE_BOARDS_DROPDOWN
+	    });
 	  }
 	};
 	
@@ -36130,7 +36142,9 @@
 
 	var UIConstants = {
 	  EXPAND_DROP_BIN: "EXPAND_DROP_BIN",
-	  RESET_BINS: "RESET BINS"
+	  RESET_BINS: "RESET BINS",
+	  TOGGLE_USER_DROPDOWN: "TOGGLE_USER_DROPDOWN",
+	  TOGGLE_BOARDS_DROPDOWN: "TOGGLE_BOARDS_DROPDOWN"
 	};
 	
 	module.exports = UIConstants;
@@ -38085,29 +38099,37 @@
 	var React = __webpack_require__(1);
 	var BoardStore = __webpack_require__(207);
 	var ApiUtil = __webpack_require__(231);
+	var DropdownStore = __webpack_require__(356);
+	var UIActions = __webpack_require__(318);
 	
 	var BoardsDropdown = React.createClass({
 	  displayName: 'BoardsDropdown',
 	
+	  _toggleVisbility: function () {
+	    UIActions.toggleBoardsDropdown();
+	  },
+	
 	  getInitialState: function () {
-	    return { boards: BoardStore.all(), visible: false };
+	    return { boards: BoardStore.all(), visible: DropdownStore.boardsDropdownExpanded() };
 	  },
 	
 	  componentDidMount: function () {
-	    this.callbackToken = BoardStore.addListener(this._onChange);
+	    this.callbackToken = BoardStore.addListener(this._onBoardsChange);
+	    this.dropdownToken = DropdownStore.addListener(this._onVisibilityChange);
 	    ApiUtil.fetchBoards();
 	  },
 	
 	  componentWillUnmount: function () {
 	    this.callbackToken.remove();
+	    this.dropdownToken.remove();
 	  },
 	
-	  _onChange: function () {
+	  _onBoardsChange: function () {
 	    this.setState({ boards: BoardStore.all() });
 	  },
 	
-	  _toggleVisbility: function () {
-	    this.setState({ visible: !this.state.visible });
+	  _onVisibilityChange: function () {
+	    this.setState({ visible: DropdownStore.boardsDropdownExpanded() });
 	  },
 	
 	  render: function () {
@@ -38160,18 +38182,17 @@
 
 	var React = __webpack_require__(1);
 	var ApiUtil = __webpack_require__(231);
-	
+	var UIActions = __webpack_require__(318);
+	var DropdownStore = __webpack_require__(356);
 	var UserDropdown = React.createClass({
 	  displayName: 'UserDropdown',
 	
 	  getInitialState: function () {
-	    return { visible: false };
-	    // return { user: CurrentUserStore.user(), visible: false };
+	    return { visible: DropdownStore.userDropdownExpanded() };
 	  },
 	
 	  componentDidMount: function () {
-	    // this.callbackToken = CurrentUserStore.addListener(this._onChange);
-	    // ApiUtil.fetchCurrentUser();
+	    this.callbackToken = DropdownStore.addListener(this._onChange);
 	  },
 	
 	  componentWillUnmount: function () {
@@ -38179,11 +38200,11 @@
 	  },
 	
 	  _onChange: function () {
-	    // this.setState({ user: CurrentUserStore.user() });
+	    this.setState({ visible: DropdownStore.userDropdownExpanded() });
 	  },
 	
 	  _toggleVisbility: function () {
-	    this.setState({ visible: !this.state.visible });
+	    UIActions.toggleUserDropdown();
 	  },
 	
 	  logOut: function () {
@@ -38287,6 +38308,43 @@
 	});
 	
 	module.exports = Profile;
+
+/***/ },
+/* 356 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(208).Store;
+	var AppDispatcher = __webpack_require__(228);
+	var DropdownStore = new Store(AppDispatcher);
+	var UIConstants = __webpack_require__(319);
+	
+	var _expanded = {
+	  userDropdown: false,
+	  boardsDropdown: false
+	};
+	
+	DropdownStore.userDropdownExpanded = function () {
+	  return _expanded.userDropdown;
+	};
+	
+	DropdownStore.boardsDropdownExpanded = function () {
+	  return _expanded.boardsDropdown;
+	};
+	
+	DropdownStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case UIConstants.TOGGLE_USER_DROPDOWN:
+	      _expanded.userDropdown = !_expanded.userDropdown;
+	      DropdownStore.__emitChange();
+	      break;
+	    case UIConstants.TOGGLE_BOARDS_DROPDOWN:
+	      _expanded.boardsDropdown = !_expanded.boardsDropdown;
+	      DropdownStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = DropdownStore;
 
 /***/ }
 /******/ ]);

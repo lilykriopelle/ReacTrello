@@ -1,16 +1,15 @@
 var React = require('react');
 var ApiUtil = require('../util/api_util.js');
-
+var UIActions = require('../actions/ui_actions.js');
+var DropdownStore = require('../stores/dropdown_store.js');
 var UserDropdown = React.createClass({
 
   getInitialState: function () {
-    return { visible: false };
-    // return { user: CurrentUserStore.user(), visible: false };
+    return { visible: DropdownStore.userDropdownExpanded() };
   },
 
   componentDidMount: function () {
-    // this.callbackToken = CurrentUserStore.addListener(this._onChange);
-    // ApiUtil.fetchCurrentUser();
+    this.callbackToken = DropdownStore.addListener(this._onChange);
   },
 
   componentWillUnmount: function () {
@@ -18,11 +17,11 @@ var UserDropdown = React.createClass({
   },
 
   _onChange: function () {
-    // this.setState({ user: CurrentUserStore.user() });
+    this.setState({ visible: DropdownStore.userDropdownExpanded() });
   },
 
   _toggleVisbility: function () {
-    this.setState({visible: !this.state.visible});
+    UIActions.toggleUserDropdown();
   },
 
   logOut: function () {

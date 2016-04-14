@@ -1,28 +1,36 @@
 var React = require('react');
 var BoardStore = require('../stores/board_store.js');
 var ApiUtil = require('../util/api_util.js');
+var DropdownStore = require('../stores/dropdown_store.js');
+var UIActions = require('../actions/ui_actions.js');
 
 var BoardsDropdown = React.createClass({
 
+  _toggleVisbility: function () {
+    UIActions.toggleBoardsDropdown();
+  },
+
   getInitialState: function () {
-    return { boards: BoardStore.all(), visible: false };
+    return { boards: BoardStore.all(), visible: DropdownStore.boardsDropdownExpanded() };
   },
 
   componentDidMount: function () {
-    this.callbackToken = BoardStore.addListener(this._onChange);
+    this.callbackToken = BoardStore.addListener(this._onBoardsChange);
+    this.dropdownToken = DropdownStore.addListener(this._onVisibilityChange);
     ApiUtil.fetchBoards();
   },
 
   componentWillUnmount: function () {
     this.callbackToken.remove();
+    this.dropdownToken.remove();
   },
 
-  _onChange: function () {
+  _onBoardsChange: function () {
     this.setState({ boards: BoardStore.all() });
   },
 
-  _toggleVisbility: function () {
-    this.setState({visible: !this.state.visible});
+  _onVisibilityChange: function () {
+    this.setState({ visible: DropdownStore.boardsDropdownExpanded() });
   },
 
   render: function () {
