@@ -14,7 +14,7 @@ var Profile = require('./components/profile.jsx');
 var Header = React.createClass({
   render: function () {
     return (
-      <header className="group">
+      <header className="app-header group">
         <BoardsDropdown/>
         <a className="logo" href="/#">Mello</a>
         <UserDropdown/>

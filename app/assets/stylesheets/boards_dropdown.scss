@@ -33,7 +33,7 @@
   padding: 6px 0;
 }
 
-.user-dropdown-button {
+.user-dropdown .user-dropdown-button {
   background: white;
   border: 0;
   width: 100%;
@@ -47,12 +47,12 @@
   text-align: left;
 }
 
-.user-dropdown-button:hover {
+.user-dropdown .user-dropdown-button:hover {
   background-color: #298fca;
   color: white;
 }
 
-.board-list-li a {
+.boards-dropdown .board-list-li a {
   padding: 10px;
   color: #aaa;
   display: block;

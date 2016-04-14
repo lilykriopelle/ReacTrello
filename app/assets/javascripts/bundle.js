@@ -62,7 +62,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'header',
-	      { className: 'group' },
+	      { className: 'app-header group' },
 	      React.createElement(BoardsDropdown, null),
 	      React.createElement(
 	        'a',

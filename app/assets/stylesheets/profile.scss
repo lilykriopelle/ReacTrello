@@ -1,0 +1,58 @@
+.profile-header {
+  height: 190px;
+  background: #eee;
+}
+
+.user-details {
+  margin: auto;
+  width: 650px;
+  padding: 32px;
+}
+
+.profile-picture {
+  width: 75px;
+  height: 75px;
+  background: rgb(41, 143, 202);
+  margin-right: 10px;
+  position: relative;
+}
+
+.overlay {
+  width: 75px;
+  height: 75px;
+  background: rgba(0, 0, 0, 0);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.profile-picture:hover > .overlay {
+  position: absolute;
+  cursor: pointer;
+  background: rgba(0, 0, 0, .3);
+}
+
+.name-details h1 {
+  font-size: 22px;
+}
+
+.name-details button {
+  margin-top: 10px;
+  background: white;
+  padding: 8px 10px;
+  border-radius: 3px;
+  border: 0;
+  font-weight: bold;
+  font-size: 16px;
+  border: 1px solid rgb(226, 228, 230);
+}
+
+.name-details button:hover {
+  background-color: rgb(41, 143, 202);
+  color: white;
+}
+
+
+.profile-picture, .name-details {
+  float: left;
+}
