@@ -31101,6 +31101,17 @@
 	        callback && callback();
 	      }
 	    });
+	  },
+	
+	  fetchCurrentUser: function () {
+	    $.ajax({
+	      url: '/api/session',
+	      method: 'GET',
+	      dataType: 'json',
+	      success: (function (data) {
+	        ApiActions.receiveCurrentUser(data);
+	      }).bind(this)
+	    });
 	  }
 	
 	};
@@ -38214,23 +38225,30 @@
 	var ApiUtil = __webpack_require__(231);
 	var UIActions = __webpack_require__(317);
 	var DropdownStore = __webpack_require__(353);
+	var CurrentUserStore = __webpack_require__(357);
 	var UserDropdown = React.createClass({
 	  displayName: 'UserDropdown',
 	
 	  getInitialState: function () {
-	    return { visible: DropdownStore.userDropdownExpanded() };
+	    return { user: CurrentUserStore.currentUser(), visible: DropdownStore.userDropdownExpanded() };
 	  },
 	
 	  componentDidMount: function () {
-	    this.callbackToken = DropdownStore.addListener(this._onChange);
+	    this.dropdownCallbackToken = DropdownStore.addListener(this._onDropdownChange);
+	    this.currentUserCallbackToken = CurrentUserStore.addListener(this._onCurrentUserChange);
+	    ApiUtil.fetchCurrentUser();
 	  },
 	
 	  componentWillUnmount: function () {
-	    this.callbackToken.remove();
+	    this.dropdownCallbackToken.remove();
 	  },
 	
-	  _onChange: function () {
+	  _onDropdownChange: function () {
 	    this.setState({ visible: DropdownStore.userDropdownExpanded() });
+	  },
+	
+	  _onCurrentUserChange: function () {
+	    this.setState({ user: CurrentUserStore.currentUser() });
 	  },
 	
 	  _toggleVisbility: function () {
@@ -38244,7 +38262,16 @@
 	  render: function () {
 	    var user = "";
 	    if (this.state.user) {
-	      user = this.state.user.email;
+	      user = React.createElement(
+	        'p',
+	        { className: 'group', style: { background: "transparent" }, onClick: this._toggleVisbility },
+	        React.createElement(
+	          'span',
+	          { className: 'thumb' },
+	          React.createElement('img', { src: this.state.user.avatar_url })
+	        ),
+	        this.state.user.email
+	      );
 	    }
 	
 	    var dropdown = "";
@@ -38280,9 +38307,9 @@
 	      'div',
 	      { className: 'user-dropdown' },
 	      React.createElement(
-	        'a',
-	        { className: 'reveal-user-menu', onClick: this._toggleVisbility },
-	        'lily'
+	        'div',
+	        { className: 'reveal-user-menu' },
+	        user
 	      ),
 	      dropdown
 	    );

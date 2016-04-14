@@ -22,6 +22,13 @@
   z-index: 100;
 }
 
+.thumb {
+  width: 23px;
+  height: 23px;
+  float: left;
+  margin-right: 10px;
+}
+
 .board-dropdown-list {
   left: 10px;
   padding: 6px;
@@ -67,4 +74,8 @@
   font-size: 14px;
   color: rgb(140, 140, 140);
   margin: 10px 0;
+}
+
+.reveal-user-menu:hover {
+  cursor: pointer;
 }

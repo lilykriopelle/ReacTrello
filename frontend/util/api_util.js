@@ -140,6 +140,17 @@ var ApiUtil = {
         callback && callback();
       }
     });
+  },
+
+  fetchCurrentUser: function () {
+    $.ajax({
+      url: '/api/session',
+      method: 'GET',
+      dataType: 'json',
+      success: function(data) {
+        ApiActions.receiveCurrentUser(data);
+      }.bind(this)
+    });
   }
 
 };

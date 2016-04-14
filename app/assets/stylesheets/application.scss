@@ -68,7 +68,7 @@ button {
   position: relative;
 }
 
-.app-header a {
+.app-header a, .reveal-user-menu {
   padding: 6px;
   border-radius: 5px;
   background-color: rgba(255,255,255,.2);
@@ -76,7 +76,7 @@ button {
   color: white;
 }
 
-.app-header a:hover {
+.app-header a:hover, .reveal-user-menu:hover {
   background-color: rgba(255,255,255,.5)
 }
 

@@ -2,22 +2,29 @@ var React = require('react');
 var ApiUtil = require('../util/api_util.js');
 var UIActions = require('../actions/ui_actions.js');
 var DropdownStore = require('../stores/dropdown_store.js');
+var CurrentUserStore = require('../stores/current_user_store.js');
 var UserDropdown = React.createClass({
 
   getInitialState: function () {
-    return { visible: DropdownStore.userDropdownExpanded() };
+    return { user: CurrentUserStore.currentUser(), visible: DropdownStore.userDropdownExpanded() };
   },
 
   componentDidMount: function () {
-    this.callbackToken = DropdownStore.addListener(this._onChange);
+    this.dropdownCallbackToken = DropdownStore.addListener(this._onDropdownChange);
+    this.currentUserCallbackToken = CurrentUserStore.addListener(this._onCurrentUserChange);
+    ApiUtil.fetchCurrentUser();
   },
 
   componentWillUnmount: function () {
-    this.callbackToken.remove();
+    this.dropdownCallbackToken.remove();
   },
 
-  _onChange: function () {
+  _onDropdownChange: function () {
     this.setState({ visible: DropdownStore.userDropdownExpanded() });
+  },
+
+  _onCurrentUserChange: function () {
+    this.setState({user: CurrentUserStore.currentUser()});
   },
 
   _toggleVisbility: function () {
@@ -31,7 +38,14 @@ var UserDropdown = React.createClass({
   render: function () {
     var user = "";
     if (this.state.user) {
-      user = this.state.user.email;
+      user = (
+        <p className="group" style={{background: "transparent"}} onClick={this._toggleVisbility}>
+          <span className="thumb">
+            <img src={this.state.user.avatar_url}/>
+          </span>
+          {this.state.user.email}
+        </p>
+      );
     }
 
     var dropdown = "";
@@ -47,7 +61,9 @@ var UserDropdown = React.createClass({
     }
     return (
       <div className="user-dropdown">
-        <a className="reveal-user-menu" onClick={this._toggleVisbility}>lily</a>
+        <div className="reveal-user-menu">
+          {user}
+        </div>
         {dropdown}
       </div>
     );
