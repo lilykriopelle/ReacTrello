@@ -22,6 +22,9 @@ class User < ActiveRecord::Base
     foreign_key: :owner_id,
     primary_key: :id
 
+  has_attached_file :avatar, styles: {thumb: "35x35#", original: "85x85#"}
+  validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
+
   attr_reader :password
   after_initialize :ensure_session_token
 

@@ -8,6 +8,6 @@ Rails.application.routes.draw do
     resources :boards
     resources :cards, only: [:create,:update]
     resources :lists, only: [:create, :update]
-    resource :session, only: [:destroy]
+    resource :session, only: [:destroy, :update, :show]
   end
 end

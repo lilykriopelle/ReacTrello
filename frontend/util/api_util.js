@@ -125,6 +125,21 @@ var ApiUtil = {
         window.location = "";
       }
     });
+  },
+
+  changeProfilePicture: function (formData, callback) {
+    $.ajax({
+      url: '/api/session',
+      type: 'PATCH',
+      processData: false,
+      contentType: false,
+      dataType: 'json',
+      data: formData,
+      success: function(post) {
+        ApiActions.receiveCurrentUser(post);
+        callback && callback();
+      }
+    });
   }
 
 };
