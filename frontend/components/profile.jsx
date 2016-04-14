@@ -42,7 +42,7 @@ var Profile = React.createClass({
     if (this.state.user) {
       img = <img src={this.state.user.avatar_url}/>;
     } else {
-      img = "LR";
+      img = "";
     }
     return (
       <div>

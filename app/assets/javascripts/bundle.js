@@ -38368,7 +38368,7 @@
 	    if (this.state.user) {
 	      img = React.createElement('img', { src: this.state.user.avatar_url });
 	    } else {
-	      img = "LR";
+	      img = "";
 	    }
 	    return React.createElement(
 	      'div',
