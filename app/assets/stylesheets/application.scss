@@ -90,12 +90,17 @@ main {
 }
 
 .board-show {
+  margin-left: 20px;
   height: 100%;
   overflow-y: hidden;
 }
 
 .boards-index {
   margin: 0 20px;
+}
+
+.boards-index h3, .board-show h3 {
+  margin-top: 20px;
 }
 
 .boards-index li:first-child, .board-show li:first-child {
@@ -368,14 +373,9 @@ main {
 }
 
 .list-list {
-  margin: 0 20px;
   display: flex;
   flex-direction: row;
   overflow: auto;
-}
-
-.board-show h3 {
-  margin: 10px 20px;
 }
 
 .scroll-container {
