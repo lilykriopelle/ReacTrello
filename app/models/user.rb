@@ -22,7 +22,9 @@ class User < ActiveRecord::Base
     foreign_key: :owner_id,
     primary_key: :id
 
-  has_attached_file :avatar, styles: {thumb: "30x30#", original: "85x85#"}
+  has_attached_file :avatar,
+    styles: {thumb: "30x30#", original: "85x85#"},
+    default_url: "/assets/:style/missing.png"
   validates_attachment_content_type :avatar, content_type: /\Aimage\/.*\Z/
 
   attr_reader :password
