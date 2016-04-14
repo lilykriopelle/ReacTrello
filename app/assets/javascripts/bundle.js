@@ -38248,14 +38248,40 @@
 	var React = __webpack_require__(1);
 	
 	var Profile = React.createClass({
-	  displayName: 'Profile',
+	  displayName: "Profile",
 	
 	  render: function () {
 	    var board = this.props.board;
 	    return React.createElement(
-	      'div',
+	      "div",
 	      null,
-	      'USER PROFILE'
+	      React.createElement(
+	        "header",
+	        { className: "profile-header" },
+	        React.createElement(
+	          "div",
+	          { className: "user-details group" },
+	          React.createElement(
+	            "div",
+	            { className: "profile-picture" },
+	            React.createElement("span", { className: "overlay" })
+	          ),
+	          React.createElement(
+	            "div",
+	            { className: "name-details" },
+	            React.createElement(
+	              "h1",
+	              null,
+	              "USER PROFILE"
+	            ),
+	            React.createElement(
+	              "button",
+	              null,
+	              "Edit Profile"
+	            )
+	          )
+	        )
+	      )
 	    );
 	  }
 	});
