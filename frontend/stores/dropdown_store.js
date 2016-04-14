@@ -16,6 +16,13 @@ DropdownStore.boardsDropdownExpanded = function () {
   return _expanded.boardsDropdown;
 };
 
+DropdownStore.collapseAll = function () {
+  _expanded = {
+    userDropdown: false,
+    boardsDropdown: false
+  };
+},
+
 DropdownStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
     case UIConstants.TOGGLE_USER_DROPDOWN:
@@ -24,6 +31,10 @@ DropdownStore.__onDispatch = function (payload) {
       break;
     case UIConstants.TOGGLE_BOARDS_DROPDOWN:
       _expanded.boardsDropdown = !_expanded.boardsDropdown;
+      DropdownStore.__emitChange();
+      break;
+    case UIConstants.COLLAPSE_ALL_DROPDOWNS:
+      DropdownStore.collapseAll();
       DropdownStore.__emitChange();
       break;
   }

@@ -9,7 +9,11 @@ var BoardShow = require('./components/board_show.jsx');
 var BoardsDropdown = require('./components/boards_dropdown.jsx');
 var UserDropdown = require('./components/user_dropdown.jsx');
 var Profile = require('./components/profile.jsx');
+var UIActions = require('./actions/ui_actions.js');
 
+var _collapseDropdowns = function () {
+  UIActions.collapseAllDropdowns();
+};
 
 var Header = React.createClass({
   render: function () {
@@ -38,9 +42,9 @@ var App = React.createClass({
 
 var routes = (
   <Route path="/" component={App}>
-    <IndexRoute component={BoardsIndex}/>
-    <Route path="boards/:id" component={BoardShow}/>
-    <Route path="profile" component={Profile}/>
+    <IndexRoute component={BoardsIndex} onEnter={_collapseDropdowns}/>
+    <Route path="boards/:id" component={BoardShow} onEnter={_collapseDropdowns}/>
+    <Route path="profile" component={Profile} onEnter={_collapseDropdowns}/>
   </Route>
 );
 

@@ -39,6 +39,12 @@ var UIActions = {
     AppDispatcher.dispatch({
       actionType: UIConstants.TOGGLE_BOARDS_DROPDOWN
     });
+  },
+
+  collapseAllDropdowns: function () {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.COLLAPSE_ALL_DROPDOWNS
+    });
   }
 };
 

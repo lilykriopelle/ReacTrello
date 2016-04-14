@@ -55,6 +55,11 @@
 	var BoardsDropdown = __webpack_require__(353);
 	var UserDropdown = __webpack_require__(354);
 	var Profile = __webpack_require__(355);
+	var UIActions = __webpack_require__(318);
+	
+	var _collapseDropdowns = function () {
+	  UIActions.collapseAllDropdowns();
+	};
 	
 	var Header = React.createClass({
 	  displayName: 'Header',
@@ -94,9 +99,9 @@
 	var routes = React.createElement(
 	  Route,
 	  { path: '/', component: App },
-	  React.createElement(IndexRoute, { component: BoardsIndex }),
-	  React.createElement(Route, { path: 'boards/:id', component: BoardShow }),
-	  React.createElement(Route, { path: 'profile', component: Profile })
+	  React.createElement(IndexRoute, { component: BoardsIndex, onEnter: _collapseDropdowns }),
+	  React.createElement(Route, { path: 'boards/:id', component: BoardShow, onEnter: _collapseDropdowns }),
+	  React.createElement(Route, { path: 'profile', component: Profile, onEnter: _collapseDropdowns })
 	);
 	
 	$(function () {
@@ -36131,6 +36136,12 @@
 	    AppDispatcher.dispatch({
 	      actionType: UIConstants.TOGGLE_BOARDS_DROPDOWN
 	    });
+	  },
+	
+	  collapseAllDropdowns: function () {
+	    AppDispatcher.dispatch({
+	      actionType: UIConstants.COLLAPSE_ALL_DROPDOWNS
+	    });
 	  }
 	};
 	
@@ -36144,7 +36155,8 @@
 	  EXPAND_DROP_BIN: "EXPAND_DROP_BIN",
 	  RESET_BINS: "RESET BINS",
 	  TOGGLE_USER_DROPDOWN: "TOGGLE_USER_DROPDOWN",
-	  TOGGLE_BOARDS_DROPDOWN: "TOGGLE_BOARDS_DROPDOWN"
+	  TOGGLE_BOARDS_DROPDOWN: "TOGGLE_BOARDS_DROPDOWN",
+	  COLLAPSE_ALL_DROPDOWNS: "COLLAPSE_ALL_DROPDOWNS"
 	};
 	
 	module.exports = UIConstants;
@@ -38331,7 +38343,12 @@
 	  return _expanded.boardsDropdown;
 	};
 	
-	DropdownStore.__onDispatch = function (payload) {
+	DropdownStore.collapseAll = function () {
+	  _expanded = {
+	    userDropdown: false,
+	    boardsDropdown: false
+	  };
+	}, DropdownStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case UIConstants.TOGGLE_USER_DROPDOWN:
 	      _expanded.userDropdown = !_expanded.userDropdown;
@@ -38339,6 +38356,10 @@
 	      break;
 	    case UIConstants.TOGGLE_BOARDS_DROPDOWN:
 	      _expanded.boardsDropdown = !_expanded.boardsDropdown;
+	      DropdownStore.__emitChange();
+	      break;
+	    case UIConstants.COLLAPSE_ALL_DROPDOWNS:
+	      DropdownStore.collapseAll();
 	      DropdownStore.__emitChange();
 	      break;
 	  }
