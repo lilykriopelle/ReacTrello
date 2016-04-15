@@ -3,6 +3,7 @@ var List = require('./list.jsx');
 var ListForm = require('./list_form.jsx');
 var BoardStore = require('../stores/board_store.js');
 var ApiUtil = require('../util/api_util.js');
+var BoardTitleEditForm = require('./board_title_edit_form.jsx');
 
 var DragDropContext = require('react-dnd').DragDropContext;
 var HTML5Backend = require('react-dnd-html5-backend');
@@ -64,28 +65,14 @@ var BoardShow = React.createClass({
     this.setState({editing: !this.state.editing});
   },
 
-  updateEditedTitle: function (e) {
-    this.setState({editedTitle: e.currentTarget.value});
-  },
-
-  updateBoard: function (e) {
-    e.preventDefault();
-    var callback = function () {
-      this.setState({editing: false});
-    }.bind(this);
-    ApiUtil.updateBoard({title: this.state.editedTitle, id: this.state.board.id}, callback);
-  },
-
   renameForm: function () {
     var renameForm = "";
+    var collapse = function () {
+      this.setState({editing: false});
+    }.bind(this);
+
     if (this.state.editing) {
-      renameForm = (
-        <form className="new-board-form">
-          <h1>Rename Board</h1>
-          <input value={this.state.editedTitle} onChange={this.updateEditedTitle}/>
-          <button onClick={this.updateBoard}>Rename</button>
-        </form>
-      );
+      renameForm = <BoardTitleEditForm collapse={collapse} board={this.state.board}/>;
     }
     return renameForm;
   },

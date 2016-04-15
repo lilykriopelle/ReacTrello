@@ -31246,6 +31246,7 @@
 	var ListForm = __webpack_require__(320);
 	var BoardStore = __webpack_require__(207);
 	var ApiUtil = __webpack_require__(231);
+	var BoardTitleEditForm = __webpack_require__(359);
 	
 	var DragDropContext = __webpack_require__(241).DragDropContext;
 	var HTML5Backend = __webpack_require__(321);
@@ -31308,36 +31309,14 @@
 	    this.setState({ editing: !this.state.editing });
 	  },
 	
-	  updateEditedTitle: function (e) {
-	    this.setState({ editedTitle: e.currentTarget.value });
-	  },
-	
-	  updateBoard: function (e) {
-	    e.preventDefault();
-	    var callback = (function () {
-	      this.setState({ editing: false });
-	    }).bind(this);
-	    ApiUtil.updateBoard({ title: this.state.editedTitle, id: this.state.board.id }, callback);
-	  },
-	
 	  renameForm: function () {
 	    var renameForm = "";
+	    var collapse = (function () {
+	      this.setState({ editing: false });
+	    }).bind(this);
+	
 	    if (this.state.editing) {
-	      renameForm = React.createElement(
-	        'form',
-	        { className: 'new-board-form' },
-	        React.createElement(
-	          'h1',
-	          null,
-	          'Rename Board'
-	        ),
-	        React.createElement('input', { value: this.state.editedTitle, onChange: this.updateEditedTitle }),
-	        React.createElement(
-	          'button',
-	          { onClick: this.updateBoard },
-	          'Rename'
-	        )
-	      );
+	      renameForm = React.createElement(BoardTitleEditForm, { collapse: collapse, board: this.state.board });
 	    }
 	    return renameForm;
 	  },
@@ -36246,6 +36225,7 @@
 
 	var React = __webpack_require__(1);
 	var ApiUtil = __webpack_require__(231);
+	var enhanceWithClickOutside = __webpack_require__(360);
 	
 	var ListForm = React.createClass({
 	  displayName: 'ListForm',
@@ -36277,6 +36257,10 @@
 	      boardId: this.props.boardId,
 	      title: this.state.title
 	    }, this._stopComposing);
+	  },
+	
+	  handleClickOutside: function () {
+	    this._stopComposing();
 	  },
 	
 	  render: function () {
@@ -36315,7 +36299,7 @@
 	
 	});
 	
-	module.exports = ListForm;
+	module.exports = enhanceWithClickOutside(ListForm);
 
 /***/ },
 /* 321 */
@@ -38560,6 +38544,95 @@
 	};
 	
 	module.exports = CurrentUserConstants;
+
+/***/ },
+/* 359 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var enhanceWithClickOutside = __webpack_require__(360);
+	var ApiUtil = __webpack_require__(231);
+	
+	var BoardTitleEditForm = React.createClass({
+	  displayName: 'BoardTitleEditForm',
+	
+	  getInitialState: function () {
+	    return { editedTitle: this.props.board.title };
+	  },
+	
+	  updateEditedTitle: function (e) {
+	    this.setState({ editedTitle: e.currentTarget.value });
+	  },
+	
+	  updateBoard: function (e) {
+	    e.preventDefault();
+	    ApiUtil.updateBoard({ title: this.state.editedTitle, id: this.props.board.id }, this.props.collapse);
+	  },
+	
+	  handleClickOutside: function () {
+	    this.props.collapse();
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'form',
+	      { className: 'new-board-form' },
+	      React.createElement(
+	        'h1',
+	        null,
+	        'Rename Board'
+	      ),
+	      React.createElement('input', { value: this.state.editedTitle, onChange: this.updateEditedTitle }),
+	      React.createElement(
+	        'button',
+	        { onClick: this.updateBoard },
+	        'Rename'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = enhanceWithClickOutside(BoardTitleEditForm);
+
+/***/ },
+/* 360 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+	
+	var React = __webpack_require__(1);
+	var ReactDOM = __webpack_require__(158);
+	
+	module.exports = function enhanceWithClickOutside(WrappedComponent) {
+	  var componentName = WrappedComponent.displayName || WrappedComponent.name;
+	
+	  return React.createClass({
+	    displayName: 'Wrapped' + componentName,
+	
+	    componentDidMount: function componentDidMount() {
+	      this.__wrappedComponent = this.refs.wrappedComponent;
+	      document.addEventListener('click', this.handleClickOutside, true);
+	    },
+	
+	    componentWillUnmount: function componentWillUnmount() {
+	      document.removeEventListener('click', this.handleClickOutside, true);
+	    },
+	
+	    handleClickOutside: function handleClickOutside(e) {
+	      var domNode = ReactDOM.findDOMNode(this);
+	      if ((!domNode || !domNode.contains(e.target)) && typeof this.refs.wrappedComponent.handleClickOutside === 'function') {
+	        this.refs.wrappedComponent.handleClickOutside(e);
+	      }
+	    },
+	
+	    render: function render() {
+	      return React.createElement(WrappedComponent, _extends({}, this.props, { ref: 'wrappedComponent' }));
+	    }
+	  });
+	};
 
 /***/ }
 /******/ ]);

@@ -1,5 +1,6 @@
 var React = require('react');
 var ApiUtil = require('../util/api_util.js');
+var enhanceWithClickOutside = require('react-click-outside');
 
 var ListForm = React.createClass({
 
@@ -32,6 +33,10 @@ var ListForm = React.createClass({
     }, this._stopComposing);
   },
 
+  handleClickOutside: function () {
+    this._stopComposing();
+  },
+
   render: function () {
     if (!this.state.composing) {
       return <button className="open-list-form"onClick={this._startComposing}>Add a list...</button>;
@@ -54,4 +59,4 @@ var ListForm = React.createClass({
 
 });
 
-module.exports = ListForm;
+module.exports = enhanceWithClickOutside(ListForm);
