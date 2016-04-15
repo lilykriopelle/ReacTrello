@@ -1,5 +1,6 @@
 var React = require('react');
 var ApiUtil = require('../util/api_util.js');
+var enhanceWithClickOutside = require('react-click-outside');
 
 var BoardForm = React.createClass({
 
@@ -37,6 +38,10 @@ var BoardForm = React.createClass({
     }.bind(this));
   },
 
+  handleClickOutside: function () {
+    this.setState(this.getInitialState());
+  },
+
   render: function () {
     if (!this.state.composing) {
       return <button className="open-board-form"onClick={this._startComposing}>Create new board...</button>;
@@ -58,4 +63,4 @@ var BoardForm = React.createClass({
 
 });
 
-module.exports = BoardForm;
+module.exports = enhanceWithClickOutside(BoardForm);

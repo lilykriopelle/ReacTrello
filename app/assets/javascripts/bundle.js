@@ -31165,6 +31165,7 @@
 
 	var React = __webpack_require__(1);
 	var ApiUtil = __webpack_require__(231);
+	var enhanceWithClickOutside = __webpack_require__(360);
 	
 	var BoardForm = React.createClass({
 	  displayName: 'BoardForm',
@@ -31196,6 +31197,10 @@
 	    ApiUtil.createBoard({ title: this.state.title }, (function () {
 	      this.setState(this.getInitialState());
 	    }).bind(this));
+	  },
+	
+	  handleClickOutside: function () {
+	    this.setState(this.getInitialState());
 	  },
 	
 	  render: function () {
@@ -31235,7 +31240,7 @@
 	
 	});
 	
-	module.exports = BoardForm;
+	module.exports = enhanceWithClickOutside(BoardForm);
 
 /***/ },
 /* 234 */
