@@ -197,8 +197,13 @@
   right: 0px;
   z-index: 100;
   padding: 12px;
+  transition: right 1s;
 }
 
+.sidebar.hide {
+  transition: right 3s;
+  right: calc(-100% + 333px);
+}
 
 .sidebar .close {
   position: absolute;

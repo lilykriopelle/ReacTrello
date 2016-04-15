@@ -31351,15 +31351,7 @@
 	  },
 	
 	  toggleSidebar: function () {
-	    this.setState({ sidebar: !this.state.sidebar });
-	  },
-	
-	  sidebar: function () {
-	    if (this.state.sidebar) {
-	      return React.createElement(Sidebar, { toggleSidebar: this.toggleSidebar });
-	    } else {
-	      return "";
-	    }
+	    this.refs.sidebar.show();
 	  },
 	
 	  render: function () {
@@ -31368,7 +31360,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'board-show' },
-	      this.sidebar(),
+	      React.createElement(Sidebar, { ref: 'sidebar', toggleSidebar: this.toggleSidebar }),
 	      React.createElement(
 	        'header',
 	        { className: 'group' },
@@ -38668,18 +38660,30 @@
 
 	var React = __webpack_require__(1);
 	var ApiUtil = __webpack_require__(231);
-	var enhanceWithClickOutside = __webpack_require__(360);
 	
 	var Sidebar = React.createClass({
 	  displayName: 'Sidebar',
 	
+	  getInitialState: function () {
+	    return { showing: false };
+	  },
+	
+	  show: function () {
+	    this.setState({ showing: true });
+	  },
+	
+	  hide: function () {
+	    this.setState({ showing: false });
+	  },
+	
 	  render: function () {
+	    var show = this.state.showing ? "show" : "hide";
 	    return React.createElement(
 	      'div',
-	      { className: 'sidebar' },
+	      { className: "sidebar" + " " + show },
 	      React.createElement(
 	        'button',
-	        { className: 'close', onClick: this.props.toggleSidebar },
+	        { className: 'close', onClick: this.hide },
 	        React.createElement('i', { className: 'fa fa-times' })
 	      ),
 	      React.createElement(

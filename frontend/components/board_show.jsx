@@ -102,15 +102,7 @@ var BoardShow = React.createClass({
   },
 
   toggleSidebar: function () {
-    this.setState({sidebar: !this.state.sidebar});
-  },
-
-  sidebar: function () {
-    if (this.state.sidebar) {
-      return <Sidebar toggleSidebar={this.toggleSidebar}/>;
-    } else {
-      return "";
-    }
+    this.refs.sidebar.show();
   },
 
   render: function () {
@@ -118,7 +110,7 @@ var BoardShow = React.createClass({
 
     return (
         <div className="board-show">
-        {this.sidebar()}
+          <Sidebar ref="sidebar" toggleSidebar={this.toggleSidebar}/>
           <header className="group">
             <h3 onClick={this._toggleEditing}>{board ? board.title : ""}</h3>
             <button onClick={this.toggleSidebar}>Show Menu</button>
