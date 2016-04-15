@@ -9,5 +9,7 @@ Rails.application.routes.draw do
     resources :cards, only: [:create,:update]
     resources :lists, only: [:create, :update]
     resource :session, only: [:destroy, :update, :show]
+    patch 'boards/:id/update_list_order', to: 'boards#update_list_order'
   end
+
 end

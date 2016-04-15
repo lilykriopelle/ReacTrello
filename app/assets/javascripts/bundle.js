@@ -24080,7 +24080,7 @@
 	        React.createElement(
 	          'li',
 	          { className: 'board-list-item' },
-	          React.createElement(BoardForm, null)
+	          React.createElement(BoardForm, { verb: 'Create' })
 	        )
 	      )
 	    );
@@ -31034,6 +31034,19 @@
 	    });
 	  },
 	
+	  updateBoard: function (board, callback) {
+	    $.ajax({
+	      url: '/api/boards/' + board.id,
+	      method: 'PATCH',
+	      dataType: 'json',
+	      data: { board: board },
+	      success: (function (data) {
+	        ApiActions.receiveBoard(data);
+	        callback && callback();
+	      }).bind(this)
+	    });
+	  },
+	
 	  updateCardOrder: function (listId, cards) {
 	    $.ajax({
 	      url: '/api/lists/' + listId,
@@ -31049,7 +31062,7 @@
 	
 	  updateListOrder: function (boardId, lists) {
 	    $.ajax({
-	      url: '/api/boards/' + boardId,
+	      url: '/api/boards/' + boardId + '/update_list_order',
 	      method: 'PATCH',
 	      dataType: 'json',
 	      data: {
@@ -31241,7 +31254,8 @@
 	  displayName: 'BoardShow',
 	
 	  getInitialState: function () {
-	    return { board: BoardStore.all()[parseInt(this.props.routeParams.id)] };
+	    var board = BoardStore.all()[parseInt(this.props.routeParams.id)];
+	    return { board: board, editing: false, editedTitle: "" };
 	  },
 	
 	  componentDidMount: function () {
@@ -31258,7 +31272,8 @@
 	  },
 	
 	  _onChange: function () {
-	    this.setState({ board: BoardStore.all()[this.props.routeParams.id] });
+	    var board = BoardStore.all()[parseInt(this.props.routeParams.id)];
+	    this.setState({ board: board, editedTitle: board.title });
 	  },
 	
 	  compareLists: function (list1, list2) {
@@ -31289,7 +31304,53 @@
 	    ApiUtil.updateListOrder(boardId, this.state.board.lists);
 	  },
 	
-	  render: function () {
+	  _toggleEditing: function () {
+	    this.setState({ editing: !this.state.editing });
+	  },
+	
+	  updateEditedTitle: function (e) {
+	    this.setState({ editedTitle: e.currentTarget.value });
+	  },
+	
+	  updateBoard: function (e) {
+	    e.preventDefault();
+	    var callback = (function () {
+	      this.setState({ editing: false });
+	    }).bind(this);
+	    ApiUtil.updateBoard({ title: this.state.editedTitle, id: this.state.board.id }, callback);
+	  },
+	
+	  renameForm: function () {
+	    var renameForm = "";
+	    if (this.state.editing) {
+	      renameForm = React.createElement(
+	        'form',
+	        { className: 'new-board-form' },
+	        React.createElement(
+	          'h1',
+	          null,
+	          'Rename Board'
+	        ),
+	        React.createElement('input', { value: this.state.editedTitle, onChange: this.updateEditedTitle }),
+	        React.createElement(
+	          'button',
+	          { onClick: this.updateBoard },
+	          'Rename'
+	        )
+	      );
+	    }
+	    return renameForm;
+	  },
+	
+	  listForm: function () {
+	    var listForm = "";
+	    if (this.state.board) {
+	      listForm = React.createElement(ListForm, { boardId: this.state.board.id });
+	    }
+	    return listForm;
+	  },
+	
+	  lists: function () {
 	    var board = this.state.board;
 	    var lists = "";
 	    if (board && board.lists) {
@@ -31301,28 +31362,29 @@
 	          drop: this.updateListOrder });
 	      }).bind(this));
 	    }
+	    return lists;
+	  },
 	
-	    var listForm = "";
-	    if (this.state.board) {
-	      listForm = React.createElement(ListForm, { boardId: this.state.board.id });
-	    }
+	  render: function () {
+	    var board = this.state.board;
 	
 	    return React.createElement(
 	      'div',
 	      { className: 'board-show' },
 	      React.createElement(
 	        'h3',
-	        null,
+	        { onClick: this._toggleEditing },
 	        board ? board.title : ""
 	      ),
+	      this.renameForm(),
 	      React.createElement(
 	        'div',
 	        { className: 'scroll-container' },
 	        React.createElement(
 	          'ul',
 	          { className: 'list-list' },
-	          lists,
-	          listForm
+	          this.lists(),
+	          this.listForm()
 	        )
 	      )
 	    );

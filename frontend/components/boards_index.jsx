@@ -32,7 +32,7 @@ var BoardsIndex = React.createClass({
               return <Board key={boardId} board={this.state.boards[boardId]} />;
             }.bind(this)) }
             <li className="board-list-item">
-              <BoardForm/>
+              <BoardForm verb="Create"/>
             </li>
           </ul>
       </div>

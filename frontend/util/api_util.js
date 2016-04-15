@@ -73,6 +73,19 @@ var ApiUtil = {
     });
   },
 
+  updateBoard: function (board, callback) {
+    $.ajax({
+      url: '/api/boards/' + board.id,
+      method: 'PATCH',
+      dataType: 'json',
+      data: { board: board },
+      success: function(data) {
+        ApiActions.receiveBoard(data);
+        callback && callback();
+      }.bind(this)
+    });
+  },
+
   updateCardOrder: function (listId, cards) {
     $.ajax({
       url: '/api/lists/' + listId,
@@ -88,7 +101,7 @@ var ApiUtil = {
 
   updateListOrder: function (boardId, lists) {
     $.ajax({
-      url: '/api/boards/' + boardId,
+      url: '/api/boards/' + boardId + '/update_list_order',
       method: 'PATCH',
       dataType: 'json',
       data: {

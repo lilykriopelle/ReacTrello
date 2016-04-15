@@ -291,7 +291,6 @@ main {
 }
 
 .add, .new-board-form button {
-  width: 67px;
   height: 34px;
   background: linear-gradient(to bottom,#61bd4f 0,#5aac44 100%);
   box-shadow: 0 1px 0 #3f6f21;
@@ -417,4 +416,9 @@ main {
     margin: 20px 0;
   }
 
+}
+
+.board-show .new-board-form {
+  margin-top: 10px;
+  position: absolute;
 }

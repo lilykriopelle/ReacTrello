@@ -10,10 +10,12 @@ class Api::BoardsController < ApplicationController
   end
 
   def update
-    board_params[:lists].values.each_with_index do |list_attrs, index|
-      List.find(list_attrs[:id]).update(ord: index)
+    @board = Board.find(params[:id])
+    if @board.update(board_params)
+      render :show
+    else
+      render json: @board.errors.full_messages
     end
-    render json: true
   end
 
   def show
@@ -24,6 +26,13 @@ class Api::BoardsController < ApplicationController
   def index
     @boards = current_user.boards.includes(:owner)
     render :index
+  end
+
+  def update_list_order
+    board_params[:lists].values.each_with_index do |list_attrs, index|
+      List.find(list_attrs[:id]).update(ord: index)
+    end
+    render json: true
   end
 
   private

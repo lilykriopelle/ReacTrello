@@ -10,7 +10,8 @@ var HTML5Backend = require('react-dnd-html5-backend');
 var BoardShow = React.createClass({
 
   getInitialState: function () {
-    return { board: BoardStore.all()[parseInt(this.props.routeParams.id)] };
+    var board = BoardStore.all()[parseInt(this.props.routeParams.id)];
+    return { board: board, editing: false, editedTitle: "" };
   },
 
   componentDidMount: function () {
@@ -27,7 +28,8 @@ var BoardShow = React.createClass({
   },
 
   _onChange: function () {
-    this.setState({ board: BoardStore.all()[this.props.routeParams.id] });
+    var board = BoardStore.all()[parseInt(this.props.routeParams.id)];
+    this.setState({ board: board, editedTitle: board.title });
   },
 
   compareLists: function(list1, list2){
@@ -58,7 +60,45 @@ var BoardShow = React.createClass({
     ApiUtil.updateListOrder(boardId, this.state.board.lists);
   },
 
-  render: function () {
+  _toggleEditing: function () {
+    this.setState({editing: !this.state.editing});
+  },
+
+  updateEditedTitle: function (e) {
+    this.setState({editedTitle: e.currentTarget.value});
+  },
+
+  updateBoard: function (e) {
+    e.preventDefault();
+    var callback = function () {
+      this.setState({editing: false});
+    }.bind(this);
+    ApiUtil.updateBoard({title: this.state.editedTitle, id: this.state.board.id}, callback);
+  },
+
+  renameForm: function () {
+    var renameForm = "";
+    if (this.state.editing) {
+      renameForm = (
+        <form className="new-board-form">
+          <h1>Rename Board</h1>
+          <input value={this.state.editedTitle} onChange={this.updateEditedTitle}/>
+          <button onClick={this.updateBoard}>Rename</button>
+        </form>
+      );
+    }
+    return renameForm;
+  },
+
+  listForm: function () {
+    var listForm = "";
+    if (this.state.board) {
+      listForm = <ListForm boardId={this.state.board.id}/>;
+    }
+    return listForm;
+  },
+
+  lists: function () {
     var board = this.state.board;
     var lists = "";
     if (board && board.lists) {
@@ -70,19 +110,20 @@ var BoardShow = React.createClass({
                   drop={this.updateListOrder}/>;
       }.bind(this));
     }
+    return lists;
+  },
 
-    var listForm = "";
-    if (this.state.board) {
-      listForm = <ListForm boardId={this.state.board.id}/>;
-    }
+  render: function () {
+    var board = this.state.board;
 
     return (
       <div className="board-show">
-        <h3>{board ? board.title : ""}</h3>
+        <h3 onClick={this._toggleEditing}>{board ? board.title : ""}</h3>
+        {this.renameForm()}
         <div className="scroll-container">
           <ul className="list-list">
-            {lists}
-            {listForm}
+            {this.lists()}
+            {this.listForm()}
           </ul>
         </div>
       </div>
