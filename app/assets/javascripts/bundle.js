@@ -31252,6 +31252,7 @@
 	var BoardStore = __webpack_require__(207);
 	var ApiUtil = __webpack_require__(231);
 	var BoardTitleEditForm = __webpack_require__(359);
+	var Sidebar = __webpack_require__(361);
 	
 	var DragDropContext = __webpack_require__(241).DragDropContext;
 	var HTML5Backend = __webpack_require__(321);
@@ -31261,7 +31262,7 @@
 	
 	  getInitialState: function () {
 	    var board = BoardStore.all()[parseInt(this.props.routeParams.id)];
-	    return { board: board, editing: false, editedTitle: "" };
+	    return { board: board, editing: false, editedTitle: "", sidebar: false };
 	  },
 	
 	  componentDidMount: function () {
@@ -31349,16 +31350,38 @@
 	    return lists;
 	  },
 	
+	  toggleSidebar: function () {
+	    this.setState({ sidebar: !this.state.sidebar });
+	  },
+	
+	  sidebar: function () {
+	    if (this.state.sidebar) {
+	      return React.createElement(Sidebar, { toggleSidebar: this.toggleSidebar });
+	    } else {
+	      return "";
+	    }
+	  },
+	
 	  render: function () {
 	    var board = this.state.board;
 	
 	    return React.createElement(
 	      'div',
 	      { className: 'board-show' },
+	      this.sidebar(),
 	      React.createElement(
-	        'h3',
-	        { onClick: this._toggleEditing },
-	        board ? board.title : ""
+	        'header',
+	        { className: 'group' },
+	        React.createElement(
+	          'h3',
+	          { onClick: this._toggleEditing },
+	          board ? board.title : ""
+	        ),
+	        React.createElement(
+	          'button',
+	          { onClick: this.toggleSidebar },
+	          'Show Menu'
+	        )
 	      ),
 	      this.renameForm(),
 	      React.createElement(
@@ -38638,6 +38661,53 @@
 	    }
 	  });
 	};
+
+/***/ },
+/* 361 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ApiUtil = __webpack_require__(231);
+	var enhanceWithClickOutside = __webpack_require__(360);
+	
+	var Sidebar = React.createClass({
+	  displayName: 'Sidebar',
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'sidebar' },
+	      React.createElement(
+	        'button',
+	        { className: 'close', onClick: this.props.toggleSidebar },
+	        React.createElement('i', { className: 'fa fa-times' })
+	      ),
+	      React.createElement(
+	        'h1',
+	        null,
+	        'Menu'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'board-action' },
+	        'Add members'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'board-action' },
+	        'Filter cards'
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'board-action' },
+	        'Activity'
+	      )
+	    );
+	  }
+	
+	});
+	
+	module.exports = Sidebar;
 
 /***/ }
 /******/ ]);

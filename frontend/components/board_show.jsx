@@ -4,6 +4,7 @@ var ListForm = require('./list_form.jsx');
 var BoardStore = require('../stores/board_store.js');
 var ApiUtil = require('../util/api_util.js');
 var BoardTitleEditForm = require('./board_title_edit_form.jsx');
+var Sidebar = require('./board_show_sidebar.jsx');
 
 var DragDropContext = require('react-dnd').DragDropContext;
 var HTML5Backend = require('react-dnd-html5-backend');
@@ -12,7 +13,7 @@ var BoardShow = React.createClass({
 
   getInitialState: function () {
     var board = BoardStore.all()[parseInt(this.props.routeParams.id)];
-    return { board: board, editing: false, editedTitle: "" };
+    return { board: board, editing: false, editedTitle: "", sidebar: false };
   },
 
   componentDidMount: function () {
@@ -100,20 +101,36 @@ var BoardShow = React.createClass({
     return lists;
   },
 
+  toggleSidebar: function () {
+    this.setState({sidebar: !this.state.sidebar});
+  },
+
+  sidebar: function () {
+    if (this.state.sidebar) {
+      return <Sidebar toggleSidebar={this.toggleSidebar}/>;
+    } else {
+      return "";
+    }
+  },
+
   render: function () {
     var board = this.state.board;
 
     return (
-      <div className="board-show">
-        <h3 onClick={this._toggleEditing}>{board ? board.title : ""}</h3>
-        {this.renameForm()}
-        <div className="scroll-container">
-          <ul className="list-list">
-            {this.lists()}
-            {this.listForm()}
-          </ul>
+        <div className="board-show">
+        {this.sidebar()}
+          <header className="group">
+            <h3 onClick={this._toggleEditing}>{board ? board.title : ""}</h3>
+            <button onClick={this.toggleSidebar}>Show Menu</button>
+          </header>
+          {this.renameForm()}
+          <div className="scroll-container">
+            <ul className="list-list">
+              {this.lists()}
+              {this.listForm()}
+            </ul>
+          </div>
         </div>
-      </div>
     );
   }
 

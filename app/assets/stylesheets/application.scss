@@ -66,6 +66,7 @@ button {
   height: 40px;
   background: #026aa7;
   position: relative;
+  z-index: 150;
 }
 
 .app-header a, .reveal-user-menu {
@@ -93,12 +94,6 @@ main {
   bottom: 0;
   left: 0;
   right: 0;
-}
-
-.board-show {
-  margin-left: 20px;
-  height: 100%;
-  overflow-y: hidden;
 }
 
 .boards-index {
@@ -143,16 +138,9 @@ main {
   color: #8c8c8c;
 }
 
-
 .open-board-form {
   width: 100%;
   margin: 0;
-}
-
-.open-list-form {
-  min-width: 322px;
-  margin-top: 10px;
-  height: 34px;
 }
 
 .open-board-form:hover {
@@ -160,7 +148,6 @@ main {
 }
 
 .new-board-form, .new-list-form {
-  min-width: 300px;
   min-height: 95px;
   background: white;
   border: 1px solid #eee;
@@ -171,25 +158,10 @@ main {
   box-shadow: 0 1px 6px rgba(0,0,0,.15);
 }
 
-.new-list-form {
-  margin-top: 10px;
-  margin-left: 10px;
-  height: 100px;
-  border-radius: 3px;
-}
-
 .new-board-form .close {
   position: absolute;
   right: 10px;
   top: 10px;
-  color: #8c8c8c;
-  cursor: pointer;
-}
-
-.new-list-form .close {
- color: #8c8c8c;
- cursor: pointer;
- float: left;
 }
 
 .new-board-form .close:hover, .new-list-form .close:hover {
@@ -254,42 +226,6 @@ main {
   padding: 10px;
 }
 
-.list {
-  min-width: 270px;
-  height: 100%;
-  background: rgb(226, 228, 230);
-  margin: 10px;
-  border-radius: 3px;
-  overflow: hidden;
-  color: rgb(77,77,77)
-}
-
-.list p {
-  margin: 8px;
-  margin-bottom: 0;
-}
-
-.list-form button {
-  float: left;
-}
-
-.open-form {
-  padding: 0;
-  width: 100%;
-  border: 0;
-  background: transparent;
-  padding: 8px;
-  text-align: left;
-  font-size: 14px;
-  color: #8c8c8c;
-}
-
-.list .open-form:hover {
-  background: #cdd2d4;
-  color: #4d4d4d;
-  text-decoration: underline;
-}
-
 .add, .new-board-form button {
   height: 34px;
   background: linear-gradient(to bottom,#61bd4f 0,#5aac44 100%);
@@ -301,93 +237,6 @@ main {
   font-size: 15px;
 }
 
-.collapse {
-  border: 0;
-  padding: 0;
-  margin: 5px;
-  margin-left: 0;
-  width: 30px;
-  height: 30px;
-  font-size: 20px;
-  color: #aaa;
-  background: transparent;
-}
-
-.list .collapse:hover {
-  color: #4d4d4d;
-}
-
-.new-card-form textarea, .new-list-form textarea {
-  box-sizing: border-box;
-  width: calc(100% - 16px) ;
-  height: 68px;
-  padding: 5px;
-  border-radius: 3px;
-  border: 0;
-  margin: 0 8px;
-  resize: none;
-  font-size: 14px;
-}
-
-.new-list-form textarea {
-  width: 200px;
-}
-
-.list .buttons {
-  margin: 8px;
-}
-
-.list:hover {
-  cursor: -webkit-grab; cursor: -moz-grab;
-}
-
-.list:active, .card:active {
-  cursor: -webkit-grabbing; cursor: -moz-grabbing;
-}
-
-.list .cards {
-  margin: 0 8px;
-}
-
-.card-index-item, .drop-bin {
-  background: white;
-  padding: 8px;
-  border-radius: 3px;
-}
-
-.drop-bin {
-  background: #e2e4e6;
-  width: 254px;
-  margin: 0 auto;
-  padding: 0;
-  height: 8px;
-}
-
-.drop-bin.active {
-  height: 34px;
-  margin: 8px auto;
-  background-color: #ccc;
-}
-
-.card-index-item:hover {
-  background: rgb(237, 239, 240);
-}
-
-.card:hover {
-  cursor: pointer;
-}
-
-.list-list {
-  display: flex;
-  flex-direction: row;
-  overflow: auto;
-  padding-bottom: 50px;
-  margin-right: 20px;
-}
-
-.scroll-container {
-  overflow: hidden;
-}
 
 @media (max-width: 966px) {
   .boards-list {
@@ -418,18 +267,7 @@ main {
 
 }
 
-.board-show .new-board-form {
-  margin-top: 10px;
+.new-board-form {
+  width: 300px;
   position: absolute;
-}
-
-.board-show > h3 {
-  padding: 3px 4px;
-  border-radius: 5px;
-  display: inline-block;
-  cursor: pointer;
-}
-
-.board-show > h3:hover {
-  background-color: rgba(55,55,55,.2);
 }
