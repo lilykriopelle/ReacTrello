@@ -38247,7 +38247,7 @@
 	    if (this.state.user) {
 	      user = React.createElement(
 	        'p',
-	        { className: 'group', style: { background: "transparent" }, onClick: this._toggleVisbility },
+	        { className: 'group', style: { background: "transparent" } },
 	        React.createElement(
 	          'span',
 	          { className: 'thumb' },
@@ -38288,7 +38288,7 @@
 	    }
 	    return React.createElement(
 	      'div',
-	      { className: 'user-dropdown' },
+	      { className: 'user-dropdown', onClick: this._toggleVisbility },
 	      React.createElement(
 	        'div',
 	        { className: 'reveal-user-menu' },

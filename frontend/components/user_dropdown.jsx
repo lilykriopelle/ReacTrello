@@ -39,7 +39,7 @@ var UserDropdown = React.createClass({
     var user = "";
     if (this.state.user) {
       user = (
-        <p className="group" style={{background: "transparent"}} onClick={this._toggleVisbility}>
+        <p className="group" style={{background: "transparent"}}>
           <span className="thumb">
             <img src={this.state.user.avatar_url}/>
           </span>
@@ -60,7 +60,7 @@ var UserDropdown = React.createClass({
       );
     }
     return (
-      <div className="user-dropdown">
+      <div className="user-dropdown" onClick={this._toggleVisbility}>
         <div className="reveal-user-menu">
           {user}
         </div>
