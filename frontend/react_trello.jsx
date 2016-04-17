@@ -4,6 +4,7 @@ var ReactRouter = require('react-router');
 var Router = ReactRouter.Router;
 var Route = ReactRouter.Route;
 var IndexRoute = ReactRouter.IndexRoute;
+var browserHistory = ReactRouter.browserHistory;
 var BoardsIndex = require('./components/boards_index.jsx');
 var BoardShow = require('./components/board_show.jsx');
 var BoardsDropdown = require('./components/boards_dropdown.jsx');
@@ -20,7 +21,7 @@ var Header = React.createClass({
     return (
       <header className="app-header group">
         <BoardsDropdown/>
-        <a className="logo" href="/#">Mello</a>
+        <a className="logo" href="/">Mello</a>
         <UserDropdown/>
       </header>
     );
@@ -48,7 +49,6 @@ var routes = (
   </Route>
 );
 
-
 $(function() {
-  ReactDOM.render(<Router>{routes}</Router>, document.getElementById('content'));
+  ReactDOM.render(<Router history={browserHistory}>{routes}</Router>, document.getElementById('content'));
 });

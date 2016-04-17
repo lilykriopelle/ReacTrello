@@ -53,7 +53,7 @@ var UserDropdown = React.createClass({
       dropdown = (
         <div className="user-dropdown-list">
           <ul>
-            <li><a className="user-dropdown-button" href="#/profile">Profile</a></li>
+            <li><a className="user-dropdown-button" href="/profile">Profile</a></li>
             <li><button className="user-dropdown-button"  onClick={this.logOut}>Log Out</button></li>
           </ul>
         </div>

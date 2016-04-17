@@ -43,7 +43,7 @@ var BoardsDropdown = React.createClass({
             { Object.keys(this.state.boards).map(function (boardId) {
               return (
                 <li className="board-list-li" key={boardId}>
-                  <a href={"#/boards/" + boardId}>
+                  <a href={"/boards/" + boardId}>
                     {this.state.boards[boardId].title}
                   </a>
                 </li>

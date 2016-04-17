@@ -224,3 +224,7 @@
 .board-action {
   margin-bottom: 12px;
 }
+
+.list-list::-webkit-scrollbar {
+  display: none;
+}

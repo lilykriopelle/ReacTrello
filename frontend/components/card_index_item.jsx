@@ -63,7 +63,7 @@ var CardIndexItem = React.createClass({
 
     return connectDragSource(connectDropTarget(
       <div>
-        <li className="card-index-item" style={{ opacity: isDragging ? 0.5 : 1 }}>
+        <li className={"card-index-item"} style={{ opacity: isDragging ? 0.5 : 1}}>
           { this.props.card.title }
         </li>
       </div>

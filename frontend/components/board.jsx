@@ -4,7 +4,7 @@ var Board = React.createClass({
   render: function () {
     var board = this.props.board;
     return <li className="board board-list-item">
-            <a href={"#/boards/" + board.id}> { board.title } </a>
+            <a href={"/boards/" + board.id}> { board.title } </a>
            </li>;
   }
 });
