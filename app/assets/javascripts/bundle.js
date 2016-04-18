@@ -40589,8 +40589,7 @@
 	      id: this.card().id,
 	      description: this.state.description
 	    }, (function () {
-	      UIActions.toggleCardModal();
-	      this.setState({ description: "", editingDescription: false });
+	      this.setState({ editingDescription: false });
 	    }).bind(this));
 	  },
 	
@@ -42654,6 +42653,7 @@
 	var AppDispatcher = __webpack_require__(228);
 	var ModalStore = new Store(AppDispatcher);
 	var UIConstants = __webpack_require__(318);
+	var BoardConstants = __webpack_require__(226);
 	
 	var _expanded = {
 	  cardModal: false
@@ -42673,6 +42673,10 @@
 	  switch (payload.actionType) {
 	    case UIConstants.TOGGLE_CARD_MODAL:
 	      _expanded.cardModal = !_expanded.cardModal;
+	      _card = payload.card;
+	      ModalStore.__emitChange();
+	      break;
+	    case BoardConstants.CARD_RECEIVED:
 	      _card = payload.card;
 	      ModalStore.__emitChange();
 	      break;

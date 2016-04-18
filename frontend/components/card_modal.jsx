@@ -70,8 +70,7 @@ var CardModal = React.createClass({
       id: this.card().id,
       description: this.state.description
     }, function () {
-      UIActions.toggleCardModal();
-      this.setState({description: "", editingDescription: false});
+      this.setState({editingDescription: false});
     }.bind(this));
   },
 
