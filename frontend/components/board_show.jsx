@@ -5,6 +5,7 @@ var BoardStore = require('../stores/board_store.js');
 var ApiUtil = require('../util/api_util.js');
 var BoardTitleEditForm = require('./board_title_edit_form.jsx');
 var Sidebar = require('./board_show_sidebar.jsx');
+var Modal = require('./card_modal.jsx');
 
 var DragDropContext = require('react-dnd').DragDropContext;
 var HTML5Backend = require('react-dnd-html5-backend');
@@ -122,6 +123,7 @@ var BoardShow = React.createClass({
               {this.listForm()}
             </ul>
           </div>
+          <Modal/>
         </div>
     );
   }

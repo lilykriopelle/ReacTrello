@@ -54,6 +54,11 @@ var CardIndexItem = React.createClass({
     }
   },
 
+  toggleCardModal: function (e) {
+    e.stopPropagation();
+    UIActions.toggleCardModal(this.props.card);
+  },
+
   render: function () {
     var connectDragSource = this.props.connectDragSource;
     var connectDropTarget = this.props.connectDropTarget;
@@ -62,7 +67,7 @@ var CardIndexItem = React.createClass({
     var showPlaceholder = this.state.placeholder;
 
     return connectDragSource(connectDropTarget(
-      <div>
+      <div onClick={this.toggleCardModal}>
         <li className={"card-index-item"} style={{ opacity: isDragging ? 0.5 : 1}}>
           { this.props.card.title }
         </li>

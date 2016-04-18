@@ -45,6 +45,13 @@ var UIActions = {
     AppDispatcher.dispatch({
       actionType: UIConstants.COLLAPSE_ALL_DROPDOWNS
     });
+  },
+
+  toggleCardModal: function (card) {
+    AppDispatcher.dispatch({
+      actionType: UIConstants.TOGGLE_CARD_MODAL,
+      card: card
+    });
   }
 };
 

@@ -12,6 +12,7 @@ var UserDropdown = require('./components/user_dropdown.jsx');
 var Profile = require('./components/profile.jsx');
 var UIActions = require('./actions/ui_actions.js');
 
+
 var _collapseDropdowns = function () {
   UIActions.collapseAllDropdowns();
 };
@@ -51,4 +52,13 @@ var routes = (
 
 $(function() {
   ReactDOM.render(<Router history={browserHistory}>{routes}</Router>, document.getElementById('content'));
+
+  // NOTE – this is a workaround for a react-modal bug.  Without it, the modal
+  // doesn't collapse when the overlay is clicked.
+  $("#modal").click(function(e) {
+    if (!e.target.className.startsWith('ReactModal__Overlay')) {
+      return;
+    }
+    UIActions.toggleCardModal();
+  });
 });
