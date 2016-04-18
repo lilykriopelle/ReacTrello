@@ -42,6 +42,21 @@ var ApiUtil = {
     });
   },
 
+  updateCard: function (card, callback) {
+    $.ajax({
+      url: '/api/cards/' + card.id,
+      method: 'PATCH',
+      dataType: 'json',
+      data: {
+        card: card
+      },
+      success: function(data) {
+        ApiActions.receiveCard(data);
+        callback && callback();
+      }.bind(this)
+    });
+  },
+
   createList: function (listData, callback) {
     $.ajax({
       url: '/api/lists',

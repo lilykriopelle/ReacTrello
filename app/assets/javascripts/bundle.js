@@ -24082,7 +24082,12 @@
 	    case BoardConstants.CARD_RECEIVED:
 	      var board = _boards[payload.card.board_id];
 	      var list = board.lists.findById(payload.card.list_id);
-	      list.cards.push(payload.card);
+	      var aCard = list.cards.findById(payload.card.id);
+	      if (aCard !== -1) {
+	        list.cards.splice(list.cards.indexOf(aCard), 1, payload.card);
+	      } else {
+	        list.cards.push(payload.card);
+	      }
 	      BoardStore.__emitChange();
 	      break;
 	    case BoardConstants.CARD_LIST_CHANGED:
@@ -30921,6 +30926,21 @@
 	          title: cardData.title,
 	          list_id: cardData.listId
 	        }
+	      },
+	      success: (function (data) {
+	        ApiActions.receiveCard(data);
+	        callback && callback();
+	      }).bind(this)
+	    });
+	  },
+	
+	  updateCard: function (card, callback) {
+	    $.ajax({
+	      url: '/api/cards/' + card.id,
+	      method: 'PATCH',
+	      dataType: 'json',
+	      data: {
+	        card: card
 	      },
 	      success: (function (data) {
 	        ApiActions.receiveCard(data);
@@ -40500,6 +40520,7 @@
 	var Modal = __webpack_require__(394);
 	var ModalStore = __webpack_require__(414);
 	var UIActions = __webpack_require__(317);
+	var ApiUtil = __webpack_require__(231);
 	
 	$(function () {
 	  Modal.setAppElement(document.getElementById('modal'));
@@ -40556,15 +40577,26 @@
 	    this.setState({ description: e.currentTarget.value });
 	  },
 	
+	  updateCard: function (e) {
+	    e.preventDefault();
+	    ApiUtil.updateCard({
+	      id: this.card().id,
+	      description: this.state.description
+	    }, (function () {
+	      UIActions.toggleCardModal();
+	      this.setState({ description: "", editingDescription: false });
+	    }).bind(this));
+	  },
+	
 	  descriptionForm: function () {
 	    if (this.state.editingDescription) {
 	      return React.createElement(
 	        'form',
 	        null,
-	        React.createElement('textarea', { value: this.state.description, onChange: this.updateDescription }),
+	        React.createElement('textarea', { value: this.card().description || this.state.description, onChange: this.updateDescription }),
 	        React.createElement(
 	          'button',
-	          { className: 'green-button' },
+	          { className: 'green-button', onClick: this.updateCard },
 	          'Save'
 	        ),
 	        React.createElement(
@@ -40575,7 +40607,7 @@
 	      );
 	    } else {
 	      var text;
-	      if (this.card().description === null) {
+	      if (this.card().description === null || this.card().description === "") {
 	        text = "Edit the description...";
 	      } else {
 	        text = this.card().description;

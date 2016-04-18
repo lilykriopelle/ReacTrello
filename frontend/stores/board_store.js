@@ -60,7 +60,12 @@ BoardStore.__onDispatch = function (payload) {
     case BoardConstants.CARD_RECEIVED:
       var board = _boards[payload.card.board_id];
       var list = board.lists.findById(payload.card.list_id);
-      list.cards.push(payload.card);
+      var aCard = list.cards.findById(payload.card.id);
+      if (aCard !== -1) {
+        list.cards.splice(list.cards.indexOf(aCard), 1, payload.card);
+      } else {
+        list.cards.push(payload.card);
+      }
       BoardStore.__emitChange();
       break;
     case BoardConstants.CARD_LIST_CHANGED:

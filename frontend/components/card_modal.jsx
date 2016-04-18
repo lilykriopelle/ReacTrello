@@ -2,6 +2,7 @@ var React = require('react');
 var Modal = require('react-modal');
 var ModalStore = require('../stores/modal_store.js');
 var UIActions = require('../actions/ui_actions');
+var ApiUtil = require('../util/api_util.js');
 
 $(function() {
   Modal.setAppElement(document.getElementById('modal'));
@@ -57,18 +58,29 @@ var CardModal = React.createClass({
     this.setState({description: e.currentTarget.value});
   },
 
+  updateCard: function (e) {
+    e.preventDefault();
+    ApiUtil.updateCard({
+      id: this.card().id,
+      description: this.state.description
+    }, function () {
+      UIActions.toggleCardModal();
+      this.setState({description: "", editingDescription: false});
+    }.bind(this));
+  },
+
   descriptionForm: function () {
     if (this.state.editingDescription) {
       return (
         <form>
-          <textarea value={this.state.description} onChange={this.updateDescription}/>
-          <button className="green-button">Save</button>
+          <textarea value={this.card().description || this.state.description} onChange={this.updateDescription}/>
+          <button className="green-button" onClick={this.updateCard}>Save</button>
           <button className="close" onClick={this.toggleEditDescription}><i className="fa fa-times"></i></button>
         </form>
       );
     } else {
       var text;
-      if (this.card().description === null) {
+      if (this.card().description === null || this.card().description === "") {
         text = "Edit the description...";
       } else {
         text = this.card().description;
