@@ -40565,7 +40565,13 @@
 	  },
 	
 	  _onChange: function () {
-	    this.setState({ modalIsOpen: ModalStore.cardModalExpanded() });
+	    var description;
+	    if (this.card()) {
+	      description = this.card().description;
+	    } else {
+	      description = "";
+	    }
+	    this.setState({ modalIsOpen: ModalStore.cardModalExpanded(), description: description });
 	  },
 	
 	  toggleEditDescription: function (e) {
@@ -40593,7 +40599,7 @@
 	      return React.createElement(
 	        'form',
 	        null,
-	        React.createElement('textarea', { value: this.card().description || this.state.description, onChange: this.updateDescription }),
+	        React.createElement('textarea', { value: this.state.description, onChange: this.updateDescription }),
 	        React.createElement(
 	          'button',
 	          { className: 'green-button', onClick: this.updateCard },
@@ -40606,17 +40612,33 @@
 	        )
 	      );
 	    } else {
-	      var text;
 	      if (this.card().description === null || this.card().description === "") {
-	        text = "Edit the description...";
+	        return React.createElement(
+	          'div',
+	          { className: 'edit-description', onClick: this.toggleEditDescription },
+	          'Edit the description...'
+	        );
 	      } else {
-	        text = this.card().description;
+	        return React.createElement(
+	          'div',
+	          { className: 'description' },
+	          React.createElement(
+	            'div',
+	            { className: 'quiet' },
+	            'Description ',
+	            React.createElement(
+	              'span',
+	              { className: 'edit-link', onClick: this.toggleEditDescription },
+	              'Edit'
+	            )
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            this.card().description
+	          )
+	        );
 	      }
-	      return React.createElement(
-	        'div',
-	        { className: 'description', onClick: this.toggleEditDescription },
-	        text
-	      );
 	    }
 	  },
 	

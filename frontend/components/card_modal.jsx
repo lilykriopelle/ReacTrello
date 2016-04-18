@@ -46,7 +46,13 @@ var CardModal = React.createClass({
   },
 
   _onChange: function () {
-    this.setState({modalIsOpen: ModalStore.cardModalExpanded()});
+    var description;
+    if (this.card()) {
+      description = this.card().description;
+    } else {
+      description = "";
+    }
+    this.setState({modalIsOpen: ModalStore.cardModalExpanded(), description: description});
   },
 
   toggleEditDescription: function (e) {
@@ -73,23 +79,26 @@ var CardModal = React.createClass({
     if (this.state.editingDescription) {
       return (
         <form>
-          <textarea value={this.card().description || this.state.description} onChange={this.updateDescription}/>
+          <textarea value={this.state.description} onChange={this.updateDescription}/>
           <button className="green-button" onClick={this.updateCard}>Save</button>
           <button className="close" onClick={this.toggleEditDescription}><i className="fa fa-times"></i></button>
         </form>
       );
     } else {
-      var text;
       if (this.card().description === null || this.card().description === "") {
-        text = "Edit the description...";
+        return (
+          <div className="edit-description" onClick={this.toggleEditDescription}>
+            Edit the description...
+          </div>
+        );
       } else {
-        text = this.card().description;
+        return (
+          <div className="description">
+            <div className="quiet">Description <span className="edit-link" onClick={this.toggleEditDescription}>Edit</span></div>
+            <p>{this.card().description}</p>
+          </div>
+        );
       }
-      return (
-        <div className="description" onClick={this.toggleEditDescription}>
-          {text}
-        </div>
-      );
     }
   },
 
