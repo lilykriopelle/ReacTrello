@@ -40521,7 +40521,10 @@
 	    right: 'auto',
 	    bottom: 'auto',
 	    marginRight: '-50%',
-	    transform: 'translate(-50%, -50%)'
+	    transform: 'translate(-50%, -50%)',
+	    width: 690,
+	    height: 'calc(100% - 40px)',
+	    overflow: 'scroll'
 	  }
 	};
 	
@@ -40529,7 +40532,7 @@
 	  displayName: 'CardModal',
 	
 	  getInitialState: function () {
-	    return { modalIsOpen: false };
+	    return { modalIsOpen: false, editingDescription: false, description: "" };
 	  },
 	
 	  componentDidMount: function () {
@@ -40544,8 +40547,83 @@
 	    this.setState({ modalIsOpen: ModalStore.cardModalExpanded() });
 	  },
 	
+	  toggleEditDescription: function (e) {
+	    e && e.preventDefault();
+	    this.setState({ editingDescription: !this.state.editingDescription });
+	  },
+	
+	  updateDescription: function (e) {
+	    this.setState({ description: e.currentTarget.value });
+	  },
+	
+	  descriptionForm: function () {
+	    if (this.state.editingDescription) {
+	      return React.createElement(
+	        'form',
+	        null,
+	        React.createElement('textarea', { value: this.state.description, onChange: this.updateDescription }),
+	        React.createElement(
+	          'button',
+	          { className: 'green-button' },
+	          'Save'
+	        ),
+	        React.createElement(
+	          'button',
+	          { className: 'close', onClick: this.toggleEditDescription },
+	          React.createElement('i', { className: 'fa fa-times' })
+	        )
+	      );
+	    } else {
+	      var text;
+	      if (this.card().description === null) {
+	        text = "Edit the description...";
+	      } else {
+	        text = this.card().description;
+	      }
+	      return React.createElement(
+	        'div',
+	        { className: 'description', onClick: this.toggleEditDescription },
+	        text
+	      );
+	    }
+	  },
+	
+	  card: function () {
+	    return ModalStore.card();
+	  },
+	
+	  modalContents: function () {
+	    var modalContents = "";
+	    if (this.card()) {
+	      modalContents = React.createElement(
+	        'div',
+	        { className: 'modal-contents' },
+	        React.createElement(
+	          'header',
+	          null,
+	          React.createElement(
+	            'h1',
+	            { className: 'card-title' },
+	            this.card().title
+	          ),
+	          React.createElement(
+	            'p',
+	            null,
+	            'in list ',
+	            this.card().list_title
+	          )
+	        ),
+	        React.createElement(
+	          'main',
+	          null,
+	          this.descriptionForm()
+	        )
+	      );
+	    }
+	    return modalContents;
+	  },
+	
 	  render: function () {
-	    var card = ModalStore.card();
 	    return React.createElement(
 	      Modal,
 	      {
@@ -40553,7 +40631,7 @@
 	        onAfterOpen: this.afterOpenModal,
 	        onRequestClose: this.closeModal,
 	        style: customStyles },
-	      card && card.title
+	      this.modalContents()
 	    );
 	  }
 	
