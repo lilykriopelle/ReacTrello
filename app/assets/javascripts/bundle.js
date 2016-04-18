@@ -40645,6 +40645,28 @@
 	    return ModalStore.card();
 	  },
 	
+	  commentForm: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'commentForm' },
+	      React.createElement(
+	        'h3',
+	        null,
+	        'Add Comment'
+	      ),
+	      React.createElement(
+	        'form',
+	        null,
+	        React.createElement('textarea', null),
+	        React.createElement(
+	          'button',
+	          { className: 'gray-button', disabled: true },
+	          'Send'
+	        )
+	      )
+	    );
+	  },
+	
 	  modalContents: function () {
 	    var modalContents = "";
 	    if (this.card()) {
@@ -40669,7 +40691,8 @@
 	        React.createElement(
 	          'main',
 	          null,
-	          this.descriptionForm()
+	          this.descriptionForm(),
+	          this.commentForm()
 	        )
 	      );
 	    }

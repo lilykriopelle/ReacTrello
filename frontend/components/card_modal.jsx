@@ -105,6 +105,18 @@ var CardModal = React.createClass({
     return ModalStore.card();
   },
 
+  commentForm: function () {
+    return (
+      <div className="commentForm">
+        <h3>Add Comment</h3>
+        <form>
+          <textarea/>
+          <button className="gray-button" disabled={true}>Send</button>
+        </form>
+      </div>
+    );
+  },
+
   modalContents: function () {
     var modalContents = "";
     if (this.card()) {
@@ -116,6 +128,7 @@ var CardModal = React.createClass({
           </header>
           <main>
             {this.descriptionForm()}
+            {this.commentForm()}
           </main>
         </div>
       );
