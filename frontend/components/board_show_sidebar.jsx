@@ -1,5 +1,6 @@
 var React = require('react');
 var ApiUtil = require('../util/api_util.js');
+var BoardMembershipForm = require('./board_membership_form.jsx');
 
 var Sidebar = React.createClass({
   getInitialState: function () {
@@ -21,7 +22,7 @@ var Sidebar = React.createClass({
         <button className="close" onClick={this.hide}><i className="fa fa-times"></i></button>
         <h1>Menu</h1>
         <div className="board-action">
-          Add members
+          <BoardMembershipForm/>
         </div>
         <div className="board-action">
           Filter cards

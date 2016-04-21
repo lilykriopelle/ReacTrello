@@ -22,6 +22,12 @@ class User < ActiveRecord::Base
     foreign_key: :owner_id,
     primary_key: :id
 
+  has_many :board_memberships
+
+  has_many :added_boards,
+    through: :board_memberships,
+    source: :board
+
   has_attached_file :avatar,
     styles: {thumb: "30x30#", original: "85x85#"},
     default_url: ":style/missing.png"

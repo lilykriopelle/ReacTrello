@@ -12,10 +12,12 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     resources :boards
+    resources :board_memberships, only: [:create, :destroy]
     resources :cards, only: [:create,:update]
     resources :lists, only: [:create, :update]
     resource :session, only: [:destroy, :update, :show]
     patch 'boards/:id/update_list_order', to: 'boards#update_list_order'
+    get 'users/search', to: 'users#search'
   end
 
   get '*unmatched_route', to: 'static_pages#root', constraints: AssetRouteConstraint.new

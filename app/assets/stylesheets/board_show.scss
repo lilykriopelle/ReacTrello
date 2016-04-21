@@ -224,8 +224,62 @@
 
 .board-action {
   margin-bottom: 12px;
+  position: relative;
 }
 
 .list-list::-webkit-scrollbar {
   display: none;
+}
+
+.sidebar h2 {
+  font-size: 16px;
+  // font-weight: normal;
+}
+
+.member-form {
+  position: absolute;
+  background: white;
+  margin: auto;
+  top: calc(100% + 10px);
+  z-index: 100;
+  padding: 12px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.member-form h1 {
+  font-weight: normal;
+  font-size: 16px;
+}
+
+.member-form input {
+  width: 100%;
+  padding: 8px 6px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  background: #eee;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+.member-form p {
+  font-size: 14px;
+}
+
+.add-members {
+  padding: 5px;
+  border-radius: 5px;
+  background: white;
+  border: 1px solid #ccc;
+  font-weight: bolder;
+}
+
+.add-members:hover {
+  background: #298fca;
+  border-color: #298fca #298fca #026aa7;
+  color: white;
+  cursor: pointer;
 }

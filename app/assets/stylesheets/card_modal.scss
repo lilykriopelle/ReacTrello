@@ -57,3 +57,7 @@
   font-size: 15px;
   padding: 7px 20px;
 }
+
+button:disabled {
+  cursor: auto;
+}

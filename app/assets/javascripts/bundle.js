@@ -38621,6 +38621,7 @@
 
 	var React = __webpack_require__(1);
 	var ApiUtil = __webpack_require__(231);
+	var BoardMembershipForm = __webpack_require__(415);
 	
 	var Sidebar = React.createClass({
 	  displayName: 'Sidebar',
@@ -38655,7 +38656,7 @@
 	      React.createElement(
 	        'div',
 	        { className: 'board-action' },
-	        'Add members'
+	        React.createElement(BoardMembershipForm, null)
 	      ),
 	      React.createElement(
 	        'div',
@@ -42707,6 +42708,66 @@
 	};
 	
 	module.exports = ModalStore;
+
+/***/ },
+/* 415 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var BoardMembershipForm = React.createClass({
+	  displayName: "BoardMembershipForm",
+	
+	  getInitialState: function () {
+	    return { memberForm: false };
+	  },
+	
+	  expandMemberForm: function () {
+	    this.setState({ memberForm: true });
+	  },
+	
+	  _closeForm: function () {
+	    this.setState({ memberForm: false });
+	  },
+	
+	  render: function () {
+	    var popUp = "";
+	    if (this.state.memberForm) {
+	      popUp = React.createElement(
+	        "form",
+	        { className: "member-form" },
+	        React.createElement(
+	          "h1",
+	          { className: "quiet" },
+	          "Members"
+	        ),
+	        React.createElement(
+	          "div",
+	          { className: "close", onClick: this._closeForm },
+	          React.createElement("i", { className: "fa fa-times" })
+	        ),
+	        React.createElement("input", { placeholder: "e.g. lily@gmail.com" }),
+	        React.createElement(
+	          "p",
+	          { className: "quiet" },
+	          "Search for a person in Mello by email address."
+	        )
+	      );
+	    }
+	    return React.createElement(
+	      "div",
+	      null,
+	      React.createElement(
+	        "h2",
+	        { className: "add-members", onClick: this.expandMemberForm },
+	        "Add members..."
+	      ),
+	      popUp
+	    );
+	  }
+	});
+	
+	module.exports = BoardMembershipForm;
 
 /***/ }
 /******/ ]);

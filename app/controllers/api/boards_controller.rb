@@ -24,7 +24,7 @@ class Api::BoardsController < ApplicationController
   end
 
   def index
-    @boards = current_user.boards.includes(:owner)
+    @boards = current_user.boards.includes(:owner).concat(current_user.added_boards)
     render :index
   end
 
