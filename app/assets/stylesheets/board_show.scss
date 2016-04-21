@@ -283,3 +283,16 @@
   color: white;
   cursor: pointer;
 }
+
+.search-results li {
+  padding: 10px;
+  background: #eee;
+  border-radius: 5px;
+  margin: 5px 0;
+  cursor: pointer;
+}
+
+.search-results li:hover {
+  background: #298fca;
+  color: white;
+}

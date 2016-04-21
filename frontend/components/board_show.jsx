@@ -111,7 +111,7 @@ var BoardShow = React.createClass({
 
     return (
         <div className="board-show">
-          <Sidebar ref="sidebar" toggleSidebar={this.toggleSidebar}/>
+          <Sidebar ref="sidebar" toggleSidebar={this.toggleSidebar} board={board}/>
           <header className="group">
             <h3 onClick={this._toggleEditing}>{board ? board.title : ""}</h3>
             <button onClick={this.toggleSidebar}>Show Menu</button>

@@ -31082,6 +31082,21 @@
 	        ApiActions.receiveUserSearchResults(users);
 	      }
 	    });
+	  },
+	
+	  addBoardMember: function (boardId, userId) {
+	    $.ajax({
+	      url: '/api/board_memberships/',
+	      method: 'POST',
+	      dataType: 'json',
+	      data: {
+	        board_membership: {
+	          board_id: boardId,
+	          user_id: userId
+	        }
+	      },
+	      success: function (board_membership) {}
+	    });
 	  }
 	
 	};
@@ -31318,7 +31333,7 @@
 	    return React.createElement(
 	      'div',
 	      { className: 'board-show' },
-	      React.createElement(Sidebar, { ref: 'sidebar', toggleSidebar: this.toggleSidebar }),
+	      React.createElement(Sidebar, { ref: 'sidebar', toggleSidebar: this.toggleSidebar, board: board }),
 	      React.createElement(
 	        'header',
 	        { className: 'group' },
@@ -38675,7 +38690,7 @@
 	      React.createElement(
 	        'div',
 	        { className: 'board-action' },
-	        React.createElement(BoardMembershipForm, null)
+	        React.createElement(BoardMembershipForm, { board: this.props.board })
 	      ),
 	      React.createElement(
 	        'div',
@@ -42734,6 +42749,9 @@
 
 	var React = __webpack_require__(1);
 	var SearchResultsStore = __webpack_require__(417);
+	var ApiActions = __webpack_require__(356);
+	var ApiUtil = __webpack_require__(231);
+	
 	var BoardMembershipForm = React.createClass({
 	  displayName: 'BoardMembershipForm',
 	
@@ -42758,12 +42776,41 @@
 	  },
 	
 	  _closeForm: function () {
-	    this.setState({ memberForm: false });
+	    this.setState({ memberForm: false, query: "" });
+	
+	    ApiActions.receiveUserSearchResults([]);
 	  },
 	
 	  _search: function (e) {
 	    this.setState({ query: e.currentTarget.value });
-	    ApiUtil.searchUsers(e.currentTarget.value);
+	    if (e.currentTarget.value.length >= 3) {
+	      ApiUtil.searchUsers(e.currentTarget.value);
+	    } else {
+	      ApiActions.receiveUserSearchResults([]);
+	    }
+	  },
+	
+	  addMember: function (id) {
+	    ApiUtil.addBoardMember(this.props.board.id, id);
+	  },
+	
+	  _searchResults: function () {
+	    return React.createElement(
+	      'ul',
+	      { className: 'search-results' },
+	      this.state.users.map((function (user) {
+	        return React.createElement(
+	          'li',
+	          { onClick: this.addMember.bind(this, user.id), key: user.id },
+	          React.createElement(
+	            'span',
+	            { className: 'thumb' },
+	            React.createElement('img', { src: user.avatar_url })
+	          ),
+	          user.email
+	        );
+	      }).bind(this))
+	    );
 	  },
 	
 	  render: function () {
@@ -42783,9 +42830,7 @@
 	          React.createElement('i', { className: 'fa fa-times' })
 	        ),
 	        React.createElement('input', { placeholder: 'e.g. lily@gmail.com', onChange: this._search, value: this.state.query }),
-	        this.state.users.map(function (user) {
-	          return user.email;
-	        }).join(", "),
+	        this._searchResults(),
 	        React.createElement(
 	          'p',
 	          { className: 'quiet' },

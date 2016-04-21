@@ -190,6 +190,23 @@ var ApiUtil = {
         ApiActions.receiveUserSearchResults(users);
       }
     });
+  },
+
+  addBoardMember: function (boardId, userId) {
+    $.ajax({
+      url: '/api/board_memberships/',
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        board_membership: {
+          board_id: boardId,
+          user_id: userId
+        }
+      },
+      success: function (board_membership) {
+
+      }
+    });
   }
 
 };

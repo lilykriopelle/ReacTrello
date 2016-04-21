@@ -22,7 +22,7 @@ var Sidebar = React.createClass({
         <button className="close" onClick={this.hide}><i className="fa fa-times"></i></button>
         <h1>Menu</h1>
         <div className="board-action">
-          <BoardMembershipForm/>
+          <BoardMembershipForm board={this.props.board}/>
         </div>
         <div className="board-action">
           Filter cards
