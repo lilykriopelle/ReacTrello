@@ -1,6 +1,7 @@
 var AppDispatcher = require('../dispatcher/dispatcher');
 var BoardConstants = require('../constants/board_constants.js');
 var ListConstants = require('../constants/list_constants.js');
+var SearchConstants = require('../constants/search_constants.js');
 var CurrentUserConstants = require('../constants/current_user_constants.js');
 
 var ApiActions = {
@@ -11,31 +12,38 @@ var ApiActions = {
     });
   },
 
-  receiveBoards: function(boards) {
+  receiveBoards: function (boards) {
     AppDispatcher.dispatch({
       actionType: BoardConstants.BOARDS_RECEIVED,
       boards: boards
     });
   },
 
-  receiveBoard: function(board) {
+  receiveBoard: function (board) {
     AppDispatcher.dispatch({
       actionType: BoardConstants.BOARD_RECEIVED,
       board: board
     });
   },
 
-  receiveList: function(list) {
+  receiveList: function (list) {
     AppDispatcher.dispatch({
       actionType: ListConstants.LIST_RECEIVED,
       list: list
     });
   },
 
-  receiveCard: function(card) {
+  receiveCard: function (card) {
     AppDispatcher.dispatch({
       actionType: BoardConstants.CARD_RECEIVED,
       card: card
+    });
+  },
+
+  receiveUserSearchResults: function (users) {
+    AppDispatcher.dispatch({
+      actionType: SearchConstants.USERS_RECEIVED,
+      users: users
     });
   }
 

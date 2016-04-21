@@ -31067,9 +31067,20 @@
 	      url: '/api/session',
 	      method: 'GET',
 	      dataType: 'json',
-	      success: (function (data) {
-	        ApiActions.receiveCurrentUser(data);
+	      success: (function (user) {
+	        ApiActions.receiveCurrentUser(user);
 	      }).bind(this)
+	    });
+	  },
+	
+	  searchUsers: function (query) {
+	    $.ajax({
+	      url: '/api/users/search?query=' + query,
+	      method: 'GET',
+	      dataType: 'json',
+	      success: function (users) {
+	        ApiActions.receiveUserSearchResults(users);
+	      }
 	    });
 	  }
 	
@@ -38446,6 +38457,7 @@
 	var AppDispatcher = __webpack_require__(228);
 	var BoardConstants = __webpack_require__(226);
 	var ListConstants = __webpack_require__(227);
+	var SearchConstants = __webpack_require__(416);
 	var CurrentUserConstants = __webpack_require__(358);
 	
 	var ApiActions = {
@@ -38481,6 +38493,13 @@
 	    AppDispatcher.dispatch({
 	      actionType: BoardConstants.CARD_RECEIVED,
 	      card: card
+	    });
+	  },
+	
+	  receiveUserSearchResults: function (users) {
+	    AppDispatcher.dispatch({
+	      actionType: SearchConstants.USERS_RECEIVED,
+	      users: users
 	    });
 	  }
 	
@@ -42714,12 +42733,24 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(1);
-	
+	var SearchResultsStore = __webpack_require__(417);
 	var BoardMembershipForm = React.createClass({
-	  displayName: "BoardMembershipForm",
+	  displayName: 'BoardMembershipForm',
 	
 	  getInitialState: function () {
-	    return { memberForm: false };
+	    return { memberForm: false, users: [], query: "" };
+	  },
+	
+	  componentDidMount: function () {
+	    this.token = SearchResultsStore.addListener(this._updateUsers);
+	  },
+	
+	  componentWillUnmount: function () {
+	    this.token.remove();
+	  },
+	
+	  _updateUsers: function () {
+	    this.setState({ users: SearchResultsStore.users() });
 	  },
 	
 	  expandMemberForm: function () {
@@ -42730,37 +42761,45 @@
 	    this.setState({ memberForm: false });
 	  },
 	
+	  _search: function (e) {
+	    this.setState({ query: e.currentTarget.value });
+	    ApiUtil.searchUsers(e.currentTarget.value);
+	  },
+	
 	  render: function () {
 	    var popUp = "";
 	    if (this.state.memberForm) {
 	      popUp = React.createElement(
-	        "form",
-	        { className: "member-form" },
+	        'form',
+	        { className: 'member-form' },
 	        React.createElement(
-	          "h1",
-	          { className: "quiet" },
-	          "Members"
+	          'h1',
+	          { className: 'quiet' },
+	          'Members'
 	        ),
 	        React.createElement(
-	          "div",
-	          { className: "close", onClick: this._closeForm },
-	          React.createElement("i", { className: "fa fa-times" })
+	          'div',
+	          { className: 'close', onClick: this._closeForm },
+	          React.createElement('i', { className: 'fa fa-times' })
 	        ),
-	        React.createElement("input", { placeholder: "e.g. lily@gmail.com" }),
+	        React.createElement('input', { placeholder: 'e.g. lily@gmail.com', onChange: this._search, value: this.state.query }),
+	        this.state.users.map(function (user) {
+	          return user.email;
+	        }).join(", "),
 	        React.createElement(
-	          "p",
-	          { className: "quiet" },
-	          "Search for a person in Mello by email address."
+	          'p',
+	          { className: 'quiet' },
+	          'Search for a person in Mello by email address.'
 	        )
 	      );
 	    }
 	    return React.createElement(
-	      "div",
+	      'div',
 	      null,
 	      React.createElement(
-	        "h2",
-	        { className: "add-members", onClick: this.expandMemberForm },
-	        "Add members..."
+	        'h2',
+	        { className: 'add-members', onClick: this.expandMemberForm },
+	        'Add members...'
 	      ),
 	      popUp
 	    );
@@ -42768,6 +42807,42 @@
 	});
 	
 	module.exports = BoardMembershipForm;
+
+/***/ },
+/* 416 */
+/***/ function(module, exports) {
+
+	var SearchConstants = {
+	  USERS_RECEIVED: "USERS_RECEIVED"
+	};
+	
+	module.exports = SearchConstants;
+
+/***/ },
+/* 417 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Store = __webpack_require__(208).Store;
+	var AppDispatcher = __webpack_require__(228);
+	var SearchResultsStore = new Store(AppDispatcher);
+	var SearchConstants = __webpack_require__(416);
+	
+	var _users = [];
+	
+	SearchResultsStore.users = function () {
+	  return _users.slice();
+	};
+	
+	SearchResultsStore.__onDispatch = function (payload) {
+	  switch (payload.actionType) {
+	    case SearchConstants.USERS_RECEIVED:
+	      _users = payload.users;
+	      SearchResultsStore.__emitChange();
+	      break;
+	  }
+	};
+	
+	module.exports = SearchResultsStore;
 
 /***/ }
 /******/ ]);

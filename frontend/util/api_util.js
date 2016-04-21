@@ -175,9 +175,20 @@ var ApiUtil = {
       url: '/api/session',
       method: 'GET',
       dataType: 'json',
-      success: function(data) {
-        ApiActions.receiveCurrentUser(data);
+      success: function(user) {
+        ApiActions.receiveCurrentUser(user);
       }.bind(this)
+    });
+  },
+
+  searchUsers: function (query) {
+    $.ajax({
+      url: '/api/users/search?query=' + query,
+      method: 'GET',
+      dataType: 'json',
+      success: function (users) {
+        ApiActions.receiveUserSearchResults(users);
+      }
     });
   }
 
