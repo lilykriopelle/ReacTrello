@@ -4,6 +4,7 @@ var ModalStore = require('../stores/modal_store.js');
 var UIActions = require('../actions/ui_actions');
 var ApiUtil = require('../util/api_util.js');
 var CommentForm = require('./comment_form.jsx');
+var Comment = require('./comment.jsx');
 
 $(function() {
   Modal.setAppElement(document.getElementById('modal'));
@@ -120,11 +121,7 @@ var CardModal = React.createClass({
             {this.descriptionForm()}
             <CommentForm card={this.card()} board={this.props.board}/>
             {this.card().comments.map(function (comment) {
-              return (
-                <p key={comment.id}>
-                  {comment.body}
-                </p>
-              );
+              return <Comment key={comment.id} comment={comment}/>;
             })}
           </main>
         </div>

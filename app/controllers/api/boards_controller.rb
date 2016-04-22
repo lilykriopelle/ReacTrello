@@ -43,7 +43,7 @@ class Api::BoardsController < ApplicationController
 
     def current_user_is_owner
       board = Board.find(params[:id])
-      unless current_user.id == board.owner_id || board.members.include?(current_user)
+      unless current_user.id == board.owner_id || board.users.include?(current_user)
         render text: "unauthorized", status: :unauthorized
       end
     end

@@ -40626,6 +40626,7 @@
 	var UIActions = __webpack_require__(317);
 	var ApiUtil = __webpack_require__(231);
 	var CommentForm = __webpack_require__(418);
+	var Comment = __webpack_require__(419);
 	
 	$(function () {
 	  Modal.setAppElement(document.getElementById('modal'));
@@ -40778,11 +40779,7 @@
 	          this.descriptionForm(),
 	          React.createElement(CommentForm, { card: this.card(), board: this.props.board }),
 	          this.card().comments.map(function (comment) {
-	            return React.createElement(
-	              'p',
-	              { key: comment.id },
-	              comment.body
-	            );
+	            return React.createElement(Comment, { key: comment.id, comment: comment });
 	          })
 	        )
 	      );
@@ -42994,6 +42991,44 @@
 	});
 	
 	module.exports = CommentForm;
+
+/***/ },
+/* 419 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var Comment = React.createClass({
+	  displayName: "Comment",
+	
+	  render: function () {
+	    return React.createElement(
+	      "div",
+	      { className: "comment group" },
+	      React.createElement(
+	        "div",
+	        { className: "thumb" },
+	        React.createElement("img", { src: this.props.comment.author.avatar_url })
+	      ),
+	      React.createElement(
+	        "div",
+	        { className: "right" },
+	        React.createElement(
+	          "div",
+	          { className: "author" },
+	          this.props.comment.author.email
+	        ),
+	        React.createElement(
+	          "p",
+	          { className: "comment-body" },
+	          this.props.comment.body
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = Comment;
 
 /***/ }
 /******/ ]);
