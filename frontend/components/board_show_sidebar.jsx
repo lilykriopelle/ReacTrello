@@ -22,13 +22,24 @@ var Sidebar = React.createClass({
         <button className="close" onClick={this.hide}><i className="fa fa-times"></i></button>
         <h1>Menu</h1>
         <div className="board-action">
+          <ul className="members group">
+            {
+              this.props.board && this.props.board.members.map(function (user) {
+                return (
+                  <div className="member big-thumb" key={user.id}>
+                    <img src={user.avatar_url} title={user.email}/>
+                  </div>
+                );
+              })
+            }
+          </ul>
           <BoardMembershipForm board={this.props.board}/>
         </div>
         <div className="board-action">
-          Filter cards
+          Filter Cards
         </div>
         <div className="board-action">
-          Activity
+          Leave Board
         </div>
       </div>
     );

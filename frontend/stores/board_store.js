@@ -47,6 +47,10 @@ BoardStore._updateOrds = function (list) {
   });
 };
 
+BoardStore._addMember = function (membership) {
+  _boards[membership.board_id].members.push(membership.user);
+};
+
 BoardStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
     case BoardConstants.BOARDS_RECEIVED:
@@ -76,6 +80,10 @@ BoardStore.__onDispatch = function (payload) {
       break;
     case ListConstants.LIST_RECEIVED:
       BoardStore._addList(payload.list);
+      BoardStore.__emitChange();
+      break;
+    case BoardConstants.MEMBERSHIP_RECEIVED:
+      BoardStore._addMember(payload.membership);
       BoardStore.__emitChange();
       break;
   }

@@ -24069,6 +24069,10 @@
 	  });
 	};
 	
+	BoardStore._addMember = function (membership) {
+	  _boards[membership.board_id].members.push(membership.user);
+	};
+	
 	BoardStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case BoardConstants.BOARDS_RECEIVED:
@@ -24098,6 +24102,10 @@
 	      break;
 	    case ListConstants.LIST_RECEIVED:
 	      BoardStore._addList(payload.list);
+	      BoardStore.__emitChange();
+	      break;
+	    case BoardConstants.MEMBERSHIP_RECEIVED:
+	      BoardStore._addMember(payload.membership);
 	      BoardStore.__emitChange();
 	      break;
 	  }
@@ -30611,7 +30619,8 @@
 	var BoardConstants = {
 	  BOARDS_RECEIVED: "BOARDS_RECEIVED",
 	  BOARD_RECEIVED: "BOARD_RECEIVED",
-	  CARD_RECEIVED: "CARD_RECEIVED"
+	  CARD_RECEIVED: "CARD_RECEIVED",
+	  MEMBERSHIP_RECEIVED: "MEMBERSHIP_RECEIVED"
 	};
 	
 	module.exports = BoardConstants;
@@ -31095,7 +31104,9 @@
 	          user_id: userId
 	        }
 	      },
-	      success: function (board_membership) {}
+	      success: function (board_membership) {
+	        ApiActions.receiveBoardMembership(board_membership);
+	      }
 	    });
 	  }
 	
@@ -38516,6 +38527,13 @@
 	      actionType: SearchConstants.USERS_RECEIVED,
 	      users: users
 	    });
+	  },
+	
+	  receiveBoardMembership: function (membership) {
+	    AppDispatcher.dispatch({
+	      actionType: BoardConstants.MEMBERSHIP_RECEIVED,
+	      membership: membership
+	    });
 	  }
 	
 	};
@@ -38690,17 +38708,28 @@
 	      React.createElement(
 	        'div',
 	        { className: 'board-action' },
+	        React.createElement(
+	          'ul',
+	          { className: 'members group' },
+	          this.props.board && this.props.board.members.map(function (user) {
+	            return React.createElement(
+	              'div',
+	              { className: 'member big-thumb', key: user.id },
+	              React.createElement('img', { src: user.avatar_url, title: user.email })
+	            );
+	          })
+	        ),
 	        React.createElement(BoardMembershipForm, { board: this.props.board })
 	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'board-action' },
-	        'Filter cards'
+	        'Filter Cards'
 	      ),
 	      React.createElement(
 	        'div',
 	        { className: 'board-action' },
-	        'Activity'
+	        'Leave Board'
 	      )
 	    );
 	  }

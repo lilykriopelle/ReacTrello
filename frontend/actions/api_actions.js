@@ -45,6 +45,13 @@ var ApiActions = {
       actionType: SearchConstants.USERS_RECEIVED,
       users: users
     });
+  },
+
+  receiveBoardMembership: function (membership) {
+    AppDispatcher.dispatch({
+      actionType: BoardConstants.MEMBERSHIP_RECEIVED,
+      membership: membership
+    });
   }
 
 };

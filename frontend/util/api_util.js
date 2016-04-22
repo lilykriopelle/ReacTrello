@@ -204,7 +204,7 @@ var ApiUtil = {
         }
       },
       success: function (board_membership) {
-
+        ApiActions.receiveBoardMembership(board_membership);
       }
     });
   }
