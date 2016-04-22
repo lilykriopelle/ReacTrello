@@ -1,4 +1,5 @@
 class Api::BoardsController < ApplicationController
+  before_action :current_user_is_owner, only: :show
 
   def create
     @board = current_user.boards.new(board_params)
@@ -38,5 +39,12 @@ class Api::BoardsController < ApplicationController
   private
     def board_params
       params.require(:board).permit(:title, :owner_id, lists: [:id, :title, :board_id, :ord, cards: [:title, :ord, :id, :list_id, :board_id]])
+    end
+
+    def current_user_is_owner
+      board = Board.find(params[:id])
+      unless current_user.id == board.owner_id || board.members.include?(current_user)
+        render text: "unauthorized", status: :unauthorized
+      end
     end
 end
