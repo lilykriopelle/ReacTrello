@@ -20,7 +20,7 @@ class Api::BoardsController < ApplicationController
   end
 
   def show
-    @board = Board.includes(:owner, lists: [cards: [:board, :list]]).find(params[:id])
+    @board = Board.includes(:owner, lists: [cards: [:board, :list, comments: :user]]).find(params[:id])
     render :show
   end
 

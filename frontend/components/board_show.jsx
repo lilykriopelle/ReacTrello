@@ -123,7 +123,7 @@ var BoardShow = React.createClass({
               {this.listForm()}
             </ul>
           </div>
-          <Modal/>
+          <Modal board={this.state.board}/>
         </div>
     );
   }

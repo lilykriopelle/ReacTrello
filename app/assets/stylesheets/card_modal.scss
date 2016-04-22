@@ -61,3 +61,23 @@
 button:disabled {
   cursor: auto;
 }
+
+.gray-button:not(:disabled) {
+  background: linear-gradient(to bottom,#61bd4f 0,#5aac44 100%);
+  font-weight: bold;
+  color: white;
+}
+
+.gray-button:not(:disabled):hover {
+  background: linear-gradient(to bottom,#5aac44 0,#519839 100%);
+}
+
+.comment-form {
+  margin-bottom: 20px; 
+}
+
+.comment-form textarea {
+  color: #4d4d4d;
+  height: 66px;
+  padding: 10px;
+}

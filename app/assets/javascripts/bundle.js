@@ -24073,6 +24073,16 @@
 	  _boards[membership.board_id].members.push(membership.user);
 	};
 	
+	BoardStore._addComment = function (board_id, comment) {
+	  _boards[board_id].lists.forEach(function (list) {
+	    list.cards.forEach(function (card) {
+	      if (card.id == comment.card_id) {
+	        card.comments.push(comment);
+	      }
+	    });
+	  });
+	};
+	
 	BoardStore.__onDispatch = function (payload) {
 	  switch (payload.actionType) {
 	    case BoardConstants.BOARDS_RECEIVED:
@@ -24106,6 +24116,10 @@
 	      break;
 	    case BoardConstants.MEMBERSHIP_RECEIVED:
 	      BoardStore._addMember(payload.membership);
+	      BoardStore.__emitChange();
+	      break;
+	    case BoardConstants.COMMENT_RECEIVED:
+	      BoardStore._addComment(payload.boardId, payload.comment);
 	      BoardStore.__emitChange();
 	      break;
 	  }
@@ -30620,7 +30634,8 @@
 	  BOARDS_RECEIVED: "BOARDS_RECEIVED",
 	  BOARD_RECEIVED: "BOARD_RECEIVED",
 	  CARD_RECEIVED: "CARD_RECEIVED",
-	  MEMBERSHIP_RECEIVED: "MEMBERSHIP_RECEIVED"
+	  MEMBERSHIP_RECEIVED: "MEMBERSHIP_RECEIVED",
+	  COMMENT_RECEIVED: "COMMENT_RECEIVED"
 	};
 	
 	module.exports = BoardConstants;
@@ -31108,6 +31123,23 @@
 	        ApiActions.receiveBoardMembership(board_membership);
 	      }
 	    });
+	  },
+	
+	  createComment: function (cardId, comment, boardId, callback) {
+	    $.ajax({
+	      url: '/api/cards/' + cardId + '/comments',
+	      method: 'POST',
+	      dataType: 'json',
+	      data: {
+	        comment: {
+	          body: comment
+	        }
+	      },
+	      success: function (comment) {
+	        callback && callback();
+	        ApiActions.receiveComment(boardId, comment);
+	      }
+	    });
 	  }
 	
 	};
@@ -31370,7 +31402,7 @@
 	          this.listForm()
 	        )
 	      ),
-	      React.createElement(Modal, null)
+	      React.createElement(Modal, { board: this.state.board })
 	    );
 	  }
 	
@@ -38534,6 +38566,14 @@
 	      actionType: BoardConstants.MEMBERSHIP_RECEIVED,
 	      membership: membership
 	    });
+	  },
+	
+	  receiveComment: function (boardId, comment) {
+	    AppDispatcher.dispatch({
+	      actionType: BoardConstants.COMMENT_RECEIVED,
+	      boardId: boardId,
+	      comment: comment
+	    });
 	  }
 	
 	};
@@ -40585,6 +40625,7 @@
 	var ModalStore = __webpack_require__(414);
 	var UIActions = __webpack_require__(317);
 	var ApiUtil = __webpack_require__(231);
+	var CommentForm = __webpack_require__(418);
 	
 	$(function () {
 	  Modal.setAppElement(document.getElementById('modal'));
@@ -40609,7 +40650,8 @@
 	    transform: 'translate(-50%, -50%)',
 	    width: 690,
 	    height: 'calc(100% - 40px)',
-	    overflow: 'scroll'
+	    overflow: 'scroll',
+	    background: '#edeff0'
 	  }
 	};
 	
@@ -40709,28 +40751,6 @@
 	    return ModalStore.card();
 	  },
 	
-	  commentForm: function () {
-	    return React.createElement(
-	      'div',
-	      { className: 'commentForm' },
-	      React.createElement(
-	        'h3',
-	        null,
-	        'Add Comment'
-	      ),
-	      React.createElement(
-	        'form',
-	        null,
-	        React.createElement('textarea', null),
-	        React.createElement(
-	          'button',
-	          { className: 'gray-button', disabled: true },
-	          'Send'
-	        )
-	      )
-	    );
-	  },
-	
 	  modalContents: function () {
 	    var modalContents = "";
 	    if (this.card()) {
@@ -40756,7 +40776,14 @@
 	          'main',
 	          null,
 	          this.descriptionForm(),
-	          this.commentForm()
+	          React.createElement(CommentForm, { card: this.card(), board: this.props.board }),
+	          this.card().comments.map(function (comment) {
+	            return React.createElement(
+	              'p',
+	              { key: comment.id },
+	              comment.body
+	            );
+	          })
 	        )
 	      );
 	    }
@@ -42917,6 +42944,56 @@
 	};
 	
 	module.exports = SearchResultsStore;
+
+/***/ },
+/* 418 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	var ApiUtil = __webpack_require__(231);
+	
+	var CommentForm = React.createClass({
+	  displayName: 'CommentForm',
+	
+	  getInitialState: function () {
+	    return { body: "" };
+	  },
+	
+	  _onChange: function (e) {
+	    this.setState({ body: e.currentTarget.value });
+	  },
+	
+	  _submit: function (e) {
+	    e.preventDefault();
+	    ApiUtil.createComment(this.props.card.id, this.state.body, this.props.board.id, (function () {
+	      this.setState({ body: "" });
+	    }).bind(this));
+	  },
+	
+	  render: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'comment-form' },
+	      React.createElement(
+	        'h3',
+	        null,
+	        'Add Comment'
+	      ),
+	      React.createElement(
+	        'form',
+	        { onSubmit: this._submit },
+	        React.createElement('textarea', { onChange: this._onChange, value: this.state.body, placeholder: 'Write a comment...' }),
+	        React.createElement(
+	          'button',
+	          { className: 'gray-button', disabled: this.state.body === "" },
+	          'Send'
+	        )
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = CommentForm;
 
 /***/ }
 /******/ ]);

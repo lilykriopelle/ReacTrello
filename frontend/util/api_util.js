@@ -207,6 +207,23 @@ var ApiUtil = {
         ApiActions.receiveBoardMembership(board_membership);
       }
     });
+  },
+
+  createComment: function (cardId, comment, boardId, callback) {
+    $.ajax({
+      url: '/api/cards/' + cardId + '/comments',
+      method: 'POST',
+      dataType: 'json',
+      data: {
+        comment: {
+          body: comment
+        }
+      },
+      success: function (comment) {
+        callback && callback();
+        ApiActions.receiveComment(boardId, comment);
+      }
+    });
   }
 
 };

@@ -11,7 +11,7 @@ class Api::CardsController < ApplicationController
   end
 
   def update
-    @card = Card.find(params[:id])
+    @card = Card.includes(comments: :user).find(params[:id])
     list = @card.list
     @card.update(card_params)
     update_card_ords(@card.list)

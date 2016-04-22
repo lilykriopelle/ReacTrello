@@ -13,7 +13,9 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     resources :boards
     resources :board_memberships, only: [:create, :destroy]
-    resources :cards, only: [:create,:update]
+    resources :cards, only: [:create,:update] do
+      resources :comments, only: [:create]
+    end
     resources :lists, only: [:create, :update]
     resource :session, only: [:destroy, :update, :show]
     patch 'boards/:id/update_list_order', to: 'boards#update_list_order'

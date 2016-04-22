@@ -51,6 +51,16 @@ BoardStore._addMember = function (membership) {
   _boards[membership.board_id].members.push(membership.user);
 };
 
+BoardStore._addComment = function (board_id, comment) {
+  _boards[board_id].lists.forEach(function (list) {
+    list.cards.forEach(function (card) {
+      if (card.id == comment.card_id) {
+        card.comments.push(comment);
+      }
+    });
+  });
+};
+
 BoardStore.__onDispatch = function (payload) {
   switch(payload.actionType) {
     case BoardConstants.BOARDS_RECEIVED:
@@ -84,6 +94,10 @@ BoardStore.__onDispatch = function (payload) {
       break;
     case BoardConstants.MEMBERSHIP_RECEIVED:
       BoardStore._addMember(payload.membership);
+      BoardStore.__emitChange();
+      break;
+    case BoardConstants.COMMENT_RECEIVED:
+      BoardStore._addComment(payload.boardId, payload.comment);
       BoardStore.__emitChange();
       break;
   }

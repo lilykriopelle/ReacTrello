@@ -3,6 +3,7 @@ var Modal = require('react-modal');
 var ModalStore = require('../stores/modal_store.js');
 var UIActions = require('../actions/ui_actions');
 var ApiUtil = require('../util/api_util.js');
+var CommentForm = require('./comment_form.jsx');
 
 $(function() {
   Modal.setAppElement(document.getElementById('modal'));
@@ -27,7 +28,8 @@ var customStyles = {
     transform             : 'translate(-50%, -50%)',
     width                 : 690,
     height                : 'calc(100% - 40px)',
-    overflow              : 'scroll'
+    overflow              : 'scroll',
+    background            : '#edeff0'
   }
 };
 
@@ -105,18 +107,6 @@ var CardModal = React.createClass({
     return ModalStore.card();
   },
 
-  commentForm: function () {
-    return (
-      <div className="commentForm">
-        <h3>Add Comment</h3>
-        <form>
-          <textarea/>
-          <button className="gray-button" disabled={true}>Send</button>
-        </form>
-      </div>
-    );
-  },
-
   modalContents: function () {
     var modalContents = "";
     if (this.card()) {
@@ -128,7 +118,14 @@ var CardModal = React.createClass({
           </header>
           <main>
             {this.descriptionForm()}
-            {this.commentForm()}
+            <CommentForm card={this.card()} board={this.props.board}/>
+            {this.card().comments.map(function (comment) {
+              return (
+                <p key={comment.id}>
+                  {comment.body}
+                </p>
+              );
+            })}
           </main>
         </div>
       );

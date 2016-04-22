@@ -52,6 +52,14 @@ var ApiActions = {
       actionType: BoardConstants.MEMBERSHIP_RECEIVED,
       membership: membership
     });
+  },
+
+  receiveComment: function (boardId, comment) {
+    AppDispatcher.dispatch({
+      actionType: BoardConstants.COMMENT_RECEIVED,
+      boardId: boardId,
+      comment: comment
+    });
   }
 
 };
