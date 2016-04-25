@@ -12,7 +12,7 @@ class Api::BoardMembershipsController < ApplicationController
   def destroy
     @board_membership = BoardMembership.find(params[:id])
     if @board_membership.destroy
-      render json: true
+      render :show
     else
       render json: false
     end

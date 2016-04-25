@@ -12,13 +12,14 @@ Rails.application.routes.draw do
 
   namespace :api, defaults: { format: :json } do
     resources :boards
-    resources :board_memberships, only: [:create, :destroy]
+    resources :board_memberships, only: [:create]
     resources :cards, only: [:create,:update] do
       resources :comments, only: [:create]
     end
     resources :lists, only: [:create, :update]
     resource :session, only: [:destroy, :update, :show]
     patch 'boards/:id/update_list_order', to: 'boards#update_list_order'
+    resources :board_memberships, only: :destroy
     get 'users/search', to: 'users#search'
   end
 

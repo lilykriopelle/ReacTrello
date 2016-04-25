@@ -224,6 +224,18 @@ var ApiUtil = {
         ApiActions.receiveComment(boardId, comment);
       }
     });
+  },
+
+  removeBoardMember: function(membership, callback) {
+    $.ajax({
+      url: '/api/board_memberships/' + membership.id,
+      method: 'DELETE',
+      dataType: 'json',
+      success: function (board_membership) {
+        callback && callback();
+        ApiActions.removeBoardMembership(board_membership);
+      }
+    });
   }
 
 };

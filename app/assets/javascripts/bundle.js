@@ -24070,7 +24070,12 @@
 	};
 	
 	BoardStore._addMember = function (membership) {
-	  _boards[membership.board_id].members.push(membership.user);
+	  _boards[membership.board_id].memberships.push(membership);
+	};
+	
+	BoardStore._removeMember = function (membership) {
+	  var membershipIdx = _boards[membership.board_id].memberships.indexOf(_boards[membership.board_id].memberships.findById(membership.id));
+	  _boards[membership.board_id].memberships.splice(membershipIdx, 1);
 	};
 	
 	BoardStore._addComment = function (board_id, comment) {
@@ -24116,6 +24121,10 @@
 	      break;
 	    case BoardConstants.MEMBERSHIP_RECEIVED:
 	      BoardStore._addMember(payload.membership);
+	      BoardStore.__emitChange();
+	      break;
+	    case BoardConstants.MEMBERSHIP_REMOVED:
+	      BoardStore._removeMember(payload.membership);
 	      BoardStore.__emitChange();
 	      break;
 	    case BoardConstants.COMMENT_RECEIVED:
@@ -30635,6 +30644,7 @@
 	  BOARD_RECEIVED: "BOARD_RECEIVED",
 	  CARD_RECEIVED: "CARD_RECEIVED",
 	  MEMBERSHIP_RECEIVED: "MEMBERSHIP_RECEIVED",
+	  MEMBERSHIP_REMOVED: "MEMBERSHIP_REMOVED",
 	  COMMENT_RECEIVED: "COMMENT_RECEIVED"
 	};
 	
@@ -31138,6 +31148,18 @@
 	      success: function (comment) {
 	        callback && callback();
 	        ApiActions.receiveComment(boardId, comment);
+	      }
+	    });
+	  },
+	
+	  removeBoardMember: function (membership, callback) {
+	    $.ajax({
+	      url: '/api/board_memberships/' + membership.id,
+	      method: 'DELETE',
+	      dataType: 'json',
+	      success: function (board_membership) {
+	        callback && callback();
+	        ApiActions.removeBoardMembership(board_membership);
 	      }
 	    });
 	  }
@@ -38568,6 +38590,13 @@
 	    });
 	  },
 	
+	  removeBoardMembership: function (membership) {
+	    AppDispatcher.dispatch({
+	      actionType: BoardConstants.MEMBERSHIP_REMOVED,
+	      membership: membership
+	    });
+	  },
+	
 	  receiveComment: function (boardId, comment) {
 	    AppDispatcher.dispatch({
 	      actionType: BoardConstants.COMMENT_RECEIVED,
@@ -38714,12 +38743,13 @@
 	var React = __webpack_require__(1);
 	var ApiUtil = __webpack_require__(231);
 	var BoardMembershipForm = __webpack_require__(415);
+	var MemberTile = __webpack_require__(420);
 	
 	var Sidebar = React.createClass({
 	  displayName: 'Sidebar',
 	
 	  getInitialState: function () {
-	    return { showing: false };
+	    return { showing: false, userMenu: false, user: "" };
 	  },
 	
 	  show: function () {
@@ -38730,8 +38760,62 @@
 	    this.setState({ showing: false });
 	  },
 	
+	  displayUserMenu: function (membership) {
+	    this.setState({ userMenu: true, membership: membership });
+	  },
+	
+	  collapseUserMenu: function () {
+	    this.setState({ userMenu: false, user: "" });
+	  },
+	
+	  removeMember: function (e) {
+	    ApiUtil.removeBoardMember(this.state.membership, this.collapseUserMenu);
+	  },
+	
+	  userMenu: function () {
+	    return React.createElement(
+	      'div',
+	      { className: 'user-menu' },
+	      React.createElement(
+	        'div',
+	        { className: 'close', onClick: this.collapseUserMenu },
+	        React.createElement('i', { className: 'fa fa-times' })
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'group user-details' },
+	        React.createElement(
+	          'div',
+	          { className: 'big-thumb' },
+	          React.createElement('img', { src: this.state.membership.user.avatar_url })
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          this.state.membership.user.email
+	        )
+	      ),
+	      React.createElement(
+	        'div',
+	        { className: 'remove-member', onClick: this.removeMember },
+	        'Remove from Board...'
+	      )
+	    );
+	  },
+	
 	  render: function () {
 	    var show = this.state.showing ? "show" : "hide";
+	    var shouldDisplayMembers = this.props.board && this.props.board.memberships;
+	    var memberships;
+	    if (shouldDisplayMembers) {
+	      memberships = this.props.board.memberships;
+	    }
+	
+	    var userMenu = "";
+	    if (this.state.userMenu) {
+	      userMenu = this.userMenu();
+	    }
+	
 	    return React.createElement(
 	      'div',
 	      { className: "sidebar" + " " + show },
@@ -38751,14 +38835,11 @@
 	        React.createElement(
 	          'ul',
 	          { className: 'members group' },
-	          this.props.board && this.props.board.members.map(function (user) {
-	            return React.createElement(
-	              'div',
-	              { className: 'member big-thumb', key: user.id },
-	              React.createElement('img', { src: user.avatar_url, title: user.email })
-	            );
-	          })
+	          shouldDisplayMembers && memberships.map((function (membership) {
+	            return React.createElement(MemberTile, { key: membership.id, membership: membership, displayMenu: this.displayUserMenu });
+	          }).bind(this))
 	        ),
+	        userMenu,
 	        React.createElement(BoardMembershipForm, { board: this.props.board })
 	      ),
 	      React.createElement(
@@ -43029,6 +43110,35 @@
 	});
 	
 	module.exports = Comment;
+
+/***/ },
+/* 420 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(1);
+	
+	var MemberTile = React.createClass({
+	  displayName: "MemberTile",
+	
+	  displayMenu: function () {
+	    this.props.displayMenu(this.props.membership);
+	  },
+	
+	  render: function () {
+	    var membership = this.props.membership;
+	    return React.createElement(
+	      "div",
+	      null,
+	      React.createElement(
+	        "div",
+	        { className: "member big-thumb", onClick: this.displayMenu },
+	        React.createElement("img", { src: membership.user.avatar_url, title: membership.user.email })
+	      )
+	    );
+	  }
+	});
+	
+	module.exports = MemberTile;
 
 /***/ }
 /******/ ]);

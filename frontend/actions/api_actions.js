@@ -54,6 +54,13 @@ var ApiActions = {
     });
   },
 
+  removeBoardMembership: function (membership) {
+    AppDispatcher.dispatch({
+      actionType: BoardConstants.MEMBERSHIP_REMOVED,
+      membership: membership
+    });
+  },
+
   receiveComment: function (boardId, comment) {
     AppDispatcher.dispatch({
       actionType: BoardConstants.COMMENT_RECEIVED,

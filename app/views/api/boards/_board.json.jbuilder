@@ -8,6 +8,6 @@ json.lists do
   json.array! board.lists, partial: 'api/lists/list_index_item', as: :list
 end
 
-json.members do
-  json.array! board.users, partial: 'api/users/user', as: :user
+json.memberships do
+  json.array! board.board_memberships, partial: 'api/board_memberships/membership', as: :board_membership
 end

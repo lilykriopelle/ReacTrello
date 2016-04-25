@@ -40,7 +40,7 @@
   padding: 6px 0;
 }
 
-.user-dropdown-list .user-dropdown-button {
+.user-dropdown-list .user-dropdown-button, .remove-member {
   background: white;
   border: 0;
   width: 100%;
@@ -54,9 +54,10 @@
   text-align: left;
 }
 
-.user-dropdown .user-dropdown-button:hover {
+.user-dropdown .user-dropdown-button:hover, .remove-member:hover {
   background-color: #298fca;
   color: white;
+  cursor: pointer;
 }
 
 .boards-dropdown .board-list-li a {

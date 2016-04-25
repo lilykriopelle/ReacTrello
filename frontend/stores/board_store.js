@@ -48,7 +48,12 @@ BoardStore._updateOrds = function (list) {
 };
 
 BoardStore._addMember = function (membership) {
-  _boards[membership.board_id].members.push(membership.user);
+  _boards[membership.board_id].memberships.push(membership);
+};
+
+BoardStore._removeMember = function (membership) {
+  var membershipIdx = _boards[membership.board_id].memberships.indexOf(_boards[membership.board_id].memberships.findById(membership.id));
+  _boards[membership.board_id].memberships.splice(membershipIdx, 1);
 };
 
 BoardStore._addComment = function (board_id, comment) {
@@ -94,6 +99,10 @@ BoardStore.__onDispatch = function (payload) {
       break;
     case BoardConstants.MEMBERSHIP_RECEIVED:
       BoardStore._addMember(payload.membership);
+      BoardStore.__emitChange();
+      break;
+    case BoardConstants.MEMBERSHIP_REMOVED:
+      BoardStore._removeMember(payload.membership);
       BoardStore.__emitChange();
       break;
     case BoardConstants.COMMENT_RECEIVED:

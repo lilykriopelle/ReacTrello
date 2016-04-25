@@ -1,5 +1,1 @@
-json.extract! @board_membership, :board_id
-
-json.user do
-  json.partial! 'api/users/user', user: @board_membership.user
-end
+json.partial! 'api/board_memberships/membership', board_membership: @board_membership
