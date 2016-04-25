@@ -33,6 +33,7 @@ var BoardForm = React.createClass({
   },
 
   _submitBoard: function (e) {
+    e && e.preventDefault();
     ApiUtil.createBoard({ title: this.state.title }, function () {
       this.setState(this.getInitialState());
     }.bind(this));

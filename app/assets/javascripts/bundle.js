@@ -24006,7 +24006,7 @@
 	        React.createElement(
 	          'li',
 	          { className: 'board-list-item' },
-	          React.createElement(BoardForm, { verb: 'Create' })
+	          React.createElement(BoardForm, null)
 	        )
 	      )
 	    );
@@ -31231,6 +31231,7 @@
 	  },
 	
 	  _submitBoard: function (e) {
+	    e && e.preventDefault();
 	    ApiUtil.createBoard({ title: this.state.title }, (function () {
 	      this.setState(this.getInitialState());
 	    }).bind(this));
